@@ -1,0 +1,281 @@
+Uso de temas no vistos como try,except. muy buena documentación y manejo de git.
+
+
+Nota: Al eliminar un afiliado con una clase no se libera el cupo de la clase
+
+
+Ingrese una opción: 1
+
+LISTA DE CLASES
+
+Código     Nombre               Nivel              Cupos disponibles
+
+----------------------------------------------------------
+
+201        Yoga                 Principiante       15
+
+202        Crossfit             Avanzado           10
+
+203        Boxeo                Intermedio         15
+
+204        Pilates              Principiante       15
+
+205        Musculacion          Intermedio         10
+
+206        Spinning             Intermedio         12
+
+207        Funcional            Avanzado           14
+
+208        Zumba                Principiante       20
+
+209        Natacion             Intermedio         16
+
+210        Stretching           Principiante       18
+
+Ingrese el código de la clase a la que desea inscribirse: 201
+
+LISTA DE AFILIADOS
+
+Código: 101, Nombre: Juan Perez, Edad: 28, Tipo: Mensual, Teléfono: 11-2587-8779
+
+Código: 102, Nombre: Maria Juana, Edad: 32, Tipo: Premium, Teléfono: 11-3456-1028
+
+Código: 103, Nombre: Rodriguez Pol, Edad: 69, Tipo: Libre, Teléfono: 11-4678-2193
+
+Código: 104, Nombre: Tambussi Fer, Edad: 18, Tipo: Mensual, Teléfono: 11-5789-3046
+
+Código: 105, Nombre: Alejandro Esteban, Edad: 65, Tipo: Libre, Teléfono: 11-6890-4175
+
+Código: 106, Nombre: Sofia Diaz, Edad: 22, Tipo: Mensual, Teléfono: 11-7123-5684
+
+Código: 107, Nombre: Camila Torres, Edad: 45, Tipo: Mensual, Teléfono: 11-8234-6795
+
+Código: 108, Nombre: Joaquin parros, Edad: 37, Tipo: Mensual, Teléfono: 11-9345-7806
+
+Código: 109, Nombre: Maria Anjoli, Edad: 27, Tipo: Premium, Teléfono: 11-1467-8920
+
+Código: 110, Nombre: Mateo retil, Edad: 22, Tipo: Premium, Teléfono: 11-2578-9031
+
+Código: 111, Nombre: Lucas Gomez, Edad: 19, Tipo: Libre, Teléfono: 11-3689-0142
+
+Código: 112, Nombre: julio, Edad: 32, Tipo: Premium, Teléfono: 11-4790-1253
+
+Ingrese su código de afiliado: 112
+
+Inscripción realizada con éxito.
+
+--- GESTIÓN DE INSCRIPCIONES ---
+
+Opcion 1: Alta inscripción
+
+Opcion 2: Baja inscripción
+
+Opcion 3: Modificar inscripción
+
+Opcion 4: Listar inscripciones
+
+Opcion 5: Listar clases de un socio
+
+Opcion 0: Volver al menu principal
+
+Ingrese una opción: 0
+
+--- MENU PRINCIPAL ---
+
+Opción 1: Gestión de afiliados
+
+Opción 2: Gestión de clases
+
+Opción 3: Gestión de inscripciones
+
+Opción 4: Ordenamiento
+
+Opción 5: Búsqueda
+
+Opción 6: Cálculos estadísticos matriciales
+
+Opción 0: Salir
+
+Ingrese una opción: 2
+
+--- GESTIÓN DE CLASES ---
+
+Opcion 1: Sumar clase
+
+Opcion 2: Eliminar clase
+
+Opcion 3: Modificar clase
+
+Opcion 4: Listar clases
+
+Opcion 0: Volver al menu principal
+
+Ingrese una opción: 4
+
+LISTA DE CLASES
+
+Código     Nombre               Nivel              Cupos disponibles
+
+----------------------------------------------------------
+
+201        Yoga                 Principiante       14
+
+202        Crossfit             Avanzado           10
+
+203        Boxeo                Intermedio         15
+
+204        Pilates              Principiante       15
+
+205        Musculacion          Intermedio         10
+
+206        Spinning             Intermedio         12
+
+207        Funcional            Avanzado           14
+
+208        Zumba                Principiante       20
+
+209        Natacion             Intermedio         16
+
+210        Stretching           Principiante       18
+
+--- GESTIÓN DE CLASES ---
+
+Opcion 1: Sumar clase
+
+Opcion 2: Eliminar clase
+
+Opcion 3: Modificar clase
+
+Opcion 4: Listar clases
+
+Opcion 0: Volver al menu principal
+
+Ingrese una opción: 0
+
+--- MENU PRINCIPAL ---
+
+Opción 1: Gestión de afiliados
+
+Opción 2: Gestión de clases
+
+Opción 3: Gestión de inscripciones
+
+Opción 4: Ordenamiento
+
+Opción 5: Búsqueda
+
+Opción 6: Cálculos estadísticos matriciales
+
+Opción 0: Salir
+
+Ingrese una opción: 1
+
+--- GESTIÓN DE AFILIADOS ---
+
+Opcion 1: sumar afiliado
+
+Opcion 2: eliminar afiliado
+
+Opcion 3: modificar afiliado
+
+Opcion 4: listar afiliados
+
+Opcion 0: Volver al menu principal
+
+Ingrese una opción: 2
+
+BAJAR AFILIADO
+
+Ingrese el código del socio a eliminar: 112
+
+¿Seguro que desea eliminar a 'julio' (teléfono: 11-4790-1253)? (s/n)
+
+s
+
+Socio eliminado.
+
+Se eliminaron 1 inscripciones asociadas.
+
+--- GESTIÓN DE AFILIADOS ---
+
+Opcion 1: sumar afiliado
+
+Opcion 2: eliminar afiliado
+
+Opcion 3: modificar afiliado
+
+Opcion 4: listar afiliados
+
+Opcion 0: Volver al menu principal
+
+Ingrese una opción: 0
+
+--- MENU PRINCIPAL ---
+
+Opción 1: Gestión de afiliados
+
+Opción 2: Gestión de clases
+
+Opción 3: Gestión de inscripciones
+
+Opción 4: Ordenamiento
+
+Opción 5: Búsqueda
+
+Opción 6: Cálculos estadísticos matriciales
+
+Opción 0: Salir
+
+Ingrese una opción: 2
+
+--- GESTIÓN DE CLASES ---
+
+Opcion 1: Sumar clase
+
+Opcion 2: Eliminar clase
+
+Opcion 3: Modificar clase
+
+Opcion 4: Listar clases
+
+Opcion 0: Volver al menu principal
+
+Ingrese una opción: 4
+
+LISTA DE CLASES
+
+Código     Nombre               Nivel              Cupos disponibles
+
+----------------------------------------------------------
+
+201        Yoga                 Principiante       14
+
+202        Crossfit             Avanzado           10
+
+203        Boxeo                Intermedio         15
+
+204        Pilates              Principiante       15
+
+205        Musculacion          Intermedio         10
+
+206        Spinning             Intermedio         12
+
+207        Funcional            Avanzado           14
+
+208        Zumba                Principiante       20
+
+209        Natacion             Intermedio         16
+
+210        Stretching           Principiante       18}
+
+
+
+Corrección de exposición:
+qué quiero modificar: Lo que pidió el profe es que en el menú de modificación, le demos opciones al usuario para elegir qué atributo modificar, en vez de pedirle que modifique todos los atributos como estamos haciendo hoy
+
+no le gusta los sort: Lo que pidió es que usemos el sort nativo para que sea más eficiente
+
+todo en castellano: parece que había algunos nombres de variables en inglés, pidió que normalicemos
+
+sacamos la validación de 3 veces: acá no le gustó que se bloquee después de 3 veces, lo sacamos directamente
+hacer pregunta extra: como no hay el 3 time limit retry ahora, pidió que agreguemos una pregunta como método alternativo de login
