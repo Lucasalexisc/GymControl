@@ -61,4 +61,4 @@ La integración final incluye la [PR #8](https://github.com/rodrings/GymControl/
 - [Documentación final con portada](documentacion_gymcontrol.md)
 - [Estado, modificaciones y pendientes](Modificaciones.md)
 
-Repositorio: https://github.com/rodrings/GymControl
+Repositorio: https://github.com/Lucasalexisc/GymControl
