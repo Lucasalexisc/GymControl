@@ -7,7 +7,7 @@ Sistema de gestión para gimnasios desarrollado en Python como Trabajo Práctico
 Requisitos: Python 3.9 o posterior.
 
 ```bash
-python3 tp.py
+python3 main.py
 ```
 
 Credenciales de demostración:
