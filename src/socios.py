@@ -8,6 +8,10 @@ from datos import (
     AFF_PHONE,
     ENR_AFFILIATE_CODE,
     ENR_CLASS_CODE,
+    ENR_STATUS,
+    CLASS_CODE,
+    CLASS_CAPACITY,
+    classes,
     get_type_name
 )
 from validaciones import (
@@ -15,7 +19,7 @@ from validaciones import (
     pedir_entero,
     es_telefono_valido
 )
-from utilidades import search_affiliate_position
+from utilidades import search_affiliate_position, search_position
 
 # Gestión de socios ==> Este codigo habria que eliminarlo ya que no lo llaman en ninguna parte LC 2/9
 def input_option():
@@ -79,9 +83,9 @@ def sumar_afiliados():
 
 def eliminar_afiliados():
     """
-    Objetivo: eliminar un socio y sus inscripciones asociadas luego de solicitar confirmación.
+    Objetivo: eliminar un socio y sus inscripciones asociadas, liberando el cupo de las clases con inscripción activa, luego de solicitar confirmación.
     Parámetros: ninguno; solicita el código del socio por teclado.
-    Salida: no devuelve valores; actualiza las matrices de afiliados e inscripciones.
+    Salida: no devuelve valores; actualiza las matrices de afiliados, inscripciones y clases.
     """
     print("BAJAR AFILIADO")
     codigo = pedir_entero("Ingrese el código del socio a eliminar: ", "Código inválido, ingrese un número.")
@@ -92,11 +96,14 @@ def eliminar_afiliados():
         print(f"¿Seguro que desea eliminar a '{affiliates[pos][AFF_NAME]}' (teléfono: {affiliates[pos][AFF_PHONE]})? (s/n)")
         confirm = input()
         if confirm.lower() == "s":
+            cupos_liberados = liberar_cupos_de_afiliado(codigo, enrollments, classes)
             inscripciones_eliminadas = remove_enrollments_by_affiliate(codigo)
             affiliates.pop(pos)
             print("Socio eliminado.")
             if inscripciones_eliminadas > 0:
                 print(f"Se eliminaron {inscripciones_eliminadas} inscripciones asociadas.")
+            if cupos_liberados > 0:
+                print(f"Se liberaron {cupos_liberados} cupos en las clases correspondientes.")
         else:
             print("Operación cancelada.")
 
@@ -120,6 +127,22 @@ def remove_enrollments_by_affiliate(affiliate_code):
             remove_enrollment_at(i)
             deleted_count += 1
     return deleted_count
+
+def liberar_cupos_de_afiliado(codigo_afiliado, inscripciones, clases):
+    """
+    Objetivo: devolver un cupo a cada clase en la que el socio tiene una inscripción activa.
+    Parámetros: codigo_afiliado, código del socio; inscripciones, matriz de inscripciones; clases, matriz de clases.
+    Salida: cantidad de cupos liberados.
+    """
+    cupos_liberados = 0
+    for inscripcion in inscripciones:
+        if inscripcion[ENR_AFFILIATE_CODE] == codigo_afiliado and inscripcion[ENR_STATUS] == 1:
+            codigo_clase = inscripcion[ENR_CLASS_CODE]
+            posicion_clase = search_position(clases, lambda fila: fila[CLASS_CODE] == codigo_clase)
+            if posicion_clase != -1:
+                clases[posicion_clase][CLASS_CAPACITY] += 1
+                cupos_liberados += 1
+    return cupos_liberados
 
 def remove_enrollments_by_class(class_code):
     """

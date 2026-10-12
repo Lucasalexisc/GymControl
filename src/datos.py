@@ -34,11 +34,11 @@ affiliates = [
 ]
 
 classes = [
-    [201, "Yoga", 1, 15],
+    [201, "Yoga", 1, 12],
     [202, "Crossfit", 3, 10],
     [203, "Boxeo", 2, 15],
-    [204, "Pilates", 1, 15],
-    [205, "Musculacion", 2, 10],
+    [204, "Pilates", 1, 13],
+    [205, "Musculacion", 2, 8],
     [206, "Spinning", 2, 12],
     [207, "Funcional", 3, 14],
     [208, "Zumba", 1, 20],
