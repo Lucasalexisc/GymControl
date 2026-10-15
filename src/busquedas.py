@@ -5,6 +5,7 @@ CLASE_CODIGO ,
 CLASE_NOMBRE ,
 CLASE_NIVEL ,
 CLASE_CUPOS ,
+CLASE_HORARIO ,
 SOCIO_CODIGO ,
 SOCIO_NOMBRE ,
 SOCIO_EDAD ,
@@ -26,6 +27,7 @@ def buscar_clase_binaria ():
     nombres =[fila [CLASE_NOMBRE ]for fila in clases ]
     niveles =[fila [CLASE_NIVEL ]for fila in clases ]
     capacidades =[fila [CLASE_CUPOS ]for fila in clases ]
+    horarios =[fila [CLASE_HORARIO ]for fila in clases ]
 
     cantidad =len (codigos )
     for indice in range (1 ,cantidad ):
@@ -33,17 +35,20 @@ def buscar_clase_binaria ():
         clave_nombre =nombres [indice ]
         clave_nivel =niveles [indice ]
         clave_capacidad =capacidades [indice ]
+        clave_horario =horarios [indice ]
         indice_comparacion =indice -1
         while indice_comparacion >=0 and codigos [indice_comparacion ]>clave_codigo :
             codigos [indice_comparacion +1 ]=codigos [indice_comparacion ]
             nombres [indice_comparacion +1 ]=nombres [indice_comparacion ]
             niveles [indice_comparacion +1 ]=niveles [indice_comparacion ]
             capacidades [indice_comparacion +1 ]=capacidades [indice_comparacion ]
+            horarios [indice_comparacion +1 ]=horarios [indice_comparacion ]
             indice_comparacion -=1
         codigos [indice_comparacion +1 ]=clave_codigo
         nombres [indice_comparacion +1 ]=clave_nombre
         niveles [indice_comparacion +1 ]=clave_nivel
         capacidades [indice_comparacion +1 ]=clave_capacidad
+        horarios [indice_comparacion +1 ]=clave_horario
 
     inicio =0
     fin =cantidad -1
@@ -63,7 +68,7 @@ def buscar_clase_binaria ():
         print ("Clase no encontrada.")
     else :
         print (f"Clase encontrada:")
-        print (f"Código: {codigos[posicion]}, Nombre: {nombres[posicion]}, Nivel: {niveles[posicion]}, Cupos disponibles: {capacidades[posicion]}")
+        print (f"Código: {codigos[posicion]}, Nombre: {nombres[posicion]}, Nivel: {niveles[posicion]}, Cupos disponibles: {capacidades[posicion]}, Horario: {horarios[posicion]}")
 
 def buscar_socio_secuencial ():
     """

@@ -10,6 +10,7 @@ CLASE_NIVEL ,
 CLASE_CODIGO ,
 CLASE_NOMBRE ,
 CLASE_CUPOS ,
+CLASE_HORARIO ,
 INSCRIPCION_ASISTENCIAS ,
 INSCRIPCION_CODIGO ,
 INSCRIPCION_CODIGO_SOCIO ,
@@ -56,7 +57,7 @@ def ordenar_clases_por_nivel ():
 
     print ("CLASES ORDENADAS POR NIVEL (Inserción)")
     for fila in clases_ordenadas :
-        print (f"Código: {fila[CLASE_CODIGO]}, Nombre: {fila[CLASE_NOMBRE]}, Nivel: {fila[CLASE_NIVEL]}, Cupos disponibles: {fila[CLASE_CUPOS]}")
+        print (f"Código: {fila[CLASE_CODIGO]}, Nombre: {fila[CLASE_NOMBRE]}, Nivel: {fila[CLASE_NIVEL]}, Cupos disponibles: {fila[CLASE_CUPOS]}, Horario: {fila[CLASE_HORARIO]}")
 
 def ordenar_inscripciones_por_asistencias ():
     """

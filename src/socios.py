@@ -159,10 +159,9 @@ def eliminar_inscripciones_por_clase (codigo_clase ):
 
 def modificar_socio ():
     """
-    Objetivo: modificar afiliados, validando que el código exista y permitiendo
-    modificar nombre, edad, tipo y teléfono.
-    Parámetros: ninguno; solicita el código y los nuevos datos por teclado.
-    Salida: no devuelve valores; actualiza la fila correspondiente de afiliados.
+    Objetivo: modificar un atributo de un socio por vez mediante un submenú.
+    Parámetros: ninguno; solicita el código del socio y la opción a modificar.
+    Salida: no devuelve valores; actualiza el atributo elegido del socio.
     """
     print ("MODIFICAR AFILIADO")
     codigo =pedir_entero ("Ingrese el código del socio a modificar: ","Código inválido, ingrese un número.")
@@ -170,30 +169,38 @@ def modificar_socio ():
     if posicion ==-1 :
         print ("Socio no encontrado.")
     else :
-        print (f"Socio actual: {socios[posicion][SOCIO_NOMBRE]}, {socios[posicion][SOCIO_EDAD]} años, {obtener_nombre_tipo(socios[posicion][SOCIO_TIPO])}, teléfono: {socios[posicion][SOCIO_TELEFONO]}")
-        nombre =input (f"Nuevo nombre (si para mantener '{socios[posicion][SOCIO_NOMBRE]}'): ")
-        if nombre !="si":
-            socios [posicion ][SOCIO_NOMBRE ]=nombre
-        edad =input (f"Nueva edad (si para mantener {socios[posicion][SOCIO_EDAD]}): ")
-        if edad !="si":
-            while not es_entero (edad )or int (edad )<0 or int (edad )>100 :
-                print ("ERROR, se debe ingresar una edad entre 0 y 100")
-                edad =input ("Nueva edad: ")
-            socios [posicion ][SOCIO_EDAD ]=int (edad )
-        print ("Tipos: 1-Mensual  2-Libre  3-Premium")
-        codigo_tipo =input (f"Nuevo tipo (si para mantener {socios[posicion][SOCIO_TIPO]}): ")
-        if codigo_tipo !="si":
-            while not es_entero (codigo_tipo )or int (codigo_tipo )<1 or int (codigo_tipo )>3 :
-                print ("ERROR, se debe ingresar un codigo entre 1 y 3")
-                codigo_tipo =input ("Nuevo tipo: ")
-            socios [posicion ][SOCIO_TIPO ]=int (codigo_tipo )
-        telefono =input (f"Nuevo teléfono (si para mantener '{socios[posicion][SOCIO_TELEFONO]}', formato XX-XXXX-XXXX): ")
-        if telefono !="si":
-            while not es_telefono_valido (telefono ):
-                print ("ERROR, el teléfono debe tener el formato XX-XXXX-XXXX")
-                telefono =input ("Nuevo teléfono: ")
-            socios [posicion ][SOCIO_TELEFONO ]=telefono
-        print (f"Socio modificado: {socios[posicion][SOCIO_NOMBRE]}, {socios[posicion][SOCIO_EDAD]} años, {obtener_nombre_tipo(socios[posicion][SOCIO_TIPO])}, teléfono: {socios[posicion][SOCIO_TELEFONO]}")
+        opcion =-1
+        while opcion !=0 :
+            print (f"\nSocio: {socios[posicion][SOCIO_NOMBRE]} | Edad: {socios[posicion][SOCIO_EDAD]} | Tipo: {obtener_nombre_tipo(socios[posicion][SOCIO_TIPO])} | Teléfono: {socios[posicion][SOCIO_TELEFONO]}")
+            print ("1. Modificar nombre")
+            print ("2. Modificar edad")
+            print ("3. Modificar tipo")
+            print ("4. Modificar teléfono")
+            print ("0. Salir")
+            opcion =pedir_entero ("Seleccione el atributo a modificar: ","Opción inválida.",0 ,4 )
+
+            if opcion ==1 :
+                nombre =input ("Nuevo nombre: ").strip ()
+                while not nombre :
+                    print ("ERROR, el nombre no puede estar vacío.")
+                    nombre =input ("Nuevo nombre: ").strip ()
+                socios [posicion ][SOCIO_NOMBRE ]=nombre
+            elif opcion ==2 :
+                edad =pedir_entero ("Nueva edad: ","ERROR, se debe ingresar una edad entre 0 y 100",0 ,100 )
+                socios [posicion ][SOCIO_EDAD ]=edad
+            elif opcion ==3 :
+                print ("Tipos: 1-Mensual  2-Libre  3-Premium")
+                codigo_tipo =pedir_entero ("Nuevo tipo: ","ERROR, se debe ingresar un código entre 1 y 3",1 ,3 )
+                socios [posicion ][SOCIO_TIPO ]=codigo_tipo
+            elif opcion ==4 :
+                telefono =input ("Nuevo teléfono (formato XX-XXXX-XXXX): ").strip ()
+                while not es_telefono_valido (telefono ):
+                    print ("ERROR, el teléfono debe tener el formato XX-XXXX-XXXX")
+                    telefono =input ("Nuevo teléfono (formato XX-XXXX-XXXX): ").strip ()
+                socios [posicion ][SOCIO_TELEFONO ]=telefono
+
+            if opcion !=0 :
+                print ("Atributo modificado correctamente.")
 
 def listar_socios ():
     """

@@ -4,14 +4,50 @@ CLASE_CODIGO ,
 CLASE_NOMBRE ,
 CLASE_NIVEL ,
 CLASE_CUPOS ,
+CLASE_HORARIO ,
 obtener_nombre_nivel
 )
 from validaciones import (
 es_nombre_clase_valido ,
-es_entero
+es_entero ,
+pedir_entero
 )
 from utilidades import buscar_posicion_clase
 from socios import eliminar_inscripciones_por_clase
+
+def es_hora_valida (hora ):
+    partes =hora .split (":")
+    return (
+        len (partes )==2
+        and all (parte .isdigit ()for parte in partes )
+        and 0 <=int (partes [0 ])<=23
+        and 0 <=int (partes [1 ])<=59
+    )
+
+def pedir_horario ():
+    """Solicita un bloque horario y devuelve una tupla inmutable."""
+    dias_ingresados =input ("Días de cursada separados por coma: ").strip ()
+    while not dias_ingresados or any (not dia .strip ()for dia in dias_ingresados .split (",")):
+        print ("ERROR, ingrese al menos un día válido.")
+        dias_ingresados =input ("Días de cursada separados por coma: ").strip ()
+    dias =tuple (dia .strip ().capitalize ()for dia in dias_ingresados .split (","))
+
+    hora_inicio =input ("Hora de inicio (HH:MM): ").strip ()
+    while not es_hora_valida (hora_inicio ):
+        print ("ERROR, ingrese una hora válida en formato HH:MM.")
+        hora_inicio =input ("Hora de inicio (HH:MM): ").strip ()
+
+    hora_fin =input ("Hora de fin (HH:MM): ").strip ()
+    while not es_hora_valida (hora_fin )or hora_fin <=hora_inicio :
+        print ("ERROR, ingrese una hora posterior a la de inicio en formato HH:MM.")
+        hora_fin =input ("Hora de fin (HH:MM): ").strip ()
+
+    return (dias ,hora_inicio ,hora_fin )
+
+def formatear_horario (horario ):
+    """Convierte el bloque horario en un texto apto para mostrar."""
+    dias ,hora_inicio ,hora_fin =horario
+    return f"{', '.join(dias)} | {hora_inicio} a {hora_fin}"
 
 def sumar_clase ():
     """
@@ -37,8 +73,10 @@ def sumar_clase ():
         capacidad =input ("Cupos disponibles: ")
     capacidad =int (capacidad )
 
+    horario =pedir_horario ()
+
     codigo =201 if len (clases )==0 else clases [-1 ][CLASE_CODIGO ]+1
-    clases .append ([codigo ,nombre ,nivel ,capacidad ])
+    clases .append ([codigo ,nombre ,nivel ,capacidad ,horario ])
 
     print (f"Clase '{nombre}' agregada con código {codigo}.")
 
@@ -70,9 +108,9 @@ def eliminar_clase ():
 
 def modificar_clase ():
     """
-    Objetivo: modificar el nombre, el nivel o la capacidad de una clase existente.
-    Parámetros: ninguno; solicita el código y los nuevos datos por teclado.
-    Salida: no devuelve valores; actualiza la fila correspondiente de clases.
+    Objetivo: modificar un atributo de una clase por vez mediante un submenú.
+    Parámetros: ninguno; solicita el código de la clase y la opción a modificar.
+    Salida: no devuelve valores; actualiza el atributo elegido de la clase.
     """
     print ("MODIFICAR CLASE")
     codigo =input ("Ingrese el código de la clase a modificar: ")
@@ -83,26 +121,33 @@ def modificar_clase ():
     if posicion ==-1 :
         print ("Clase no encontrada.")
     else :
-        print (f"Clase actual: {clases[posicion][CLASE_NOMBRE]}, Nivel: {obtener_nombre_nivel(clases[posicion][CLASE_NIVEL])}, Cupos disponibles: {clases[posicion][CLASE_CUPOS]}")
-        nombre =input (f"Nuevo nombre (si para mantener '{clases[posicion][CLASE_NOMBRE]}'): ").strip ()
-        if nombre !="si":
-            while not es_nombre_clase_valido (nombre ):
-                print ("ERROR, ingrese una o más palabras formadas solamente por letras")
+        opcion =-1
+        while opcion !=0 :
+            print (f"\nClase: {clases[posicion][CLASE_NOMBRE]} | Nivel: {obtener_nombre_nivel(clases[posicion][CLASE_NIVEL])} | Cupos: {clases[posicion][CLASE_CUPOS]} | Horario: {formatear_horario(clases[posicion][CLASE_HORARIO])}")
+            print ("1. Modificar nombre")
+            print ("2. Modificar nivel")
+            print ("3. Modificar cupos")
+            print ("4. Modificar horario")
+            print ("0. Salir")
+            opcion =pedir_entero ("Seleccione el atributo a modificar: ","Opción inválida.",0 ,4 )
+
+            if opcion ==1 :
                 nombre =input ("Nuevo nombre: ").strip ()
-            clases [posicion ][CLASE_NOMBRE ]=nombre
-        nivel =input (f"Nuevo nivel -1-Principiante 2-Intermedio 3-Avanzado- (si para mantener {obtener_nombre_nivel(clases[posicion][CLASE_NIVEL])}): ")
-        if nivel !="si":
-            while not es_entero (nivel )or int (nivel )<1 or int (nivel )>3 :
-                print ("ERROR, nivel entre 1 y 3")
-                nivel =input ("Nuevo nivel: ")
-            clases [posicion ][CLASE_NIVEL ]=int (nivel )
-        capacidad =input (f"Nuevos cupos disponibles (si para mantener {clases[posicion][CLASE_CUPOS]}): ")
-        if capacidad !="si":
-            while not es_entero (capacidad )or int (capacidad )<1 :
-                print ("ERROR, ingresar un número mayor a 0")
-                capacidad =input ("Nuevos cupos disponibles: ")
-            clases [posicion ][CLASE_CUPOS ]=int (capacidad )
-        print (f"Clase modificada: {clases[posicion][CLASE_NOMBRE]}, Nivel: {obtener_nombre_nivel(clases[posicion][CLASE_NIVEL])}, Cupos disponibles: {clases[posicion][CLASE_CUPOS]}")
+                while not es_nombre_clase_valido (nombre ):
+                    print ("ERROR, ingrese una o más palabras formadas solamente por letras")
+                    nombre =input ("Nuevo nombre: ").strip ()
+                clases [posicion ][CLASE_NOMBRE ]=nombre
+            elif opcion ==2 :
+                nivel =pedir_entero ("Nuevo nivel (1-Principiante, 2-Intermedio, 3-Avanzado): ","ERROR, nivel entre 1 y 3",1 ,3 )
+                clases [posicion ][CLASE_NIVEL ]=nivel
+            elif opcion ==3 :
+                capacidad =pedir_entero ("Nuevos cupos disponibles: ","ERROR, ingrese un número mayor a 0",1 )
+                clases [posicion ][CLASE_CUPOS ]=capacidad
+            elif opcion ==4 :
+                clases [posicion ][CLASE_HORARIO ]=pedir_horario ()
+
+            if opcion !=0 :
+                print ("Atributo modificado correctamente.")
 
 def listar_clases ():
     """
@@ -111,7 +156,7 @@ def listar_clases ():
     Salida: no devuelve valores; muestra la lista de clases por pantalla.
     """
     print ("LISTA DE CLASES")
-    print (f"{'Código':<10} {'Nombre':<20} {'Nivel':<18} {'Cupos disponibles'}")
-    print ("-"*58 )
+    print (f"{'Código':<10} {'Nombre':<20} {'Nivel':<18} {'Cupos':<8} {'Horario'}")
+    print ("-"*90 )
     for indice in range (len (clases )):
-        print (f"{clases[indice][CLASE_CODIGO]:<10} {clases[indice][CLASE_NOMBRE]:<20} {obtener_nombre_nivel(clases[indice][CLASE_NIVEL]):<18} {clases[indice][CLASE_CUPOS]}")
+        print (f"{clases[indice][CLASE_CODIGO]:<10} {clases[indice][CLASE_NOMBRE]:<20} {obtener_nombre_nivel(clases[indice][CLASE_NIVEL]):<18} {clases[indice][CLASE_CUPOS]:<8} {formatear_horario(clases[indice][CLASE_HORARIO])}")
