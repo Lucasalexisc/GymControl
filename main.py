@@ -11,12 +11,7 @@ ruta_src = os.path.join(os.path.dirname(__file__), "src")
 if os.path.exists(ruta_src) and ruta_src not in sys.path:
     sys.path.insert(0, ruta_src)
 
-from login import login
-from menus import main_menu
+from aplicacion import ejecutar
 
 if __name__ == "__main__":
-    valid_login = login()
-
-    if valid_login:
-        main_menu()
-        print("¡Gracias por usar el sistema de gestión del gimnasio! Hasta luego.")
+    ejecutar()

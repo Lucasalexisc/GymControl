@@ -1,3 +1,4 @@
+from auditoria import registrar_auditoria
 from datos import (
     classes,
     CLASS_CODE,
@@ -40,6 +41,7 @@ def sumar_clase():
     codigo = 201 if len(classes) == 0 else classes[-1][CLASS_CODE] + 1
     classes.append([codigo, nombre, nivel, capacidad])
 
+    registrar_auditoria("ALTA_CLASE", f"Código={codigo}")
     print(f"Clase '{nombre}' agregada con código {codigo}.")
 
 def eliminar_clase():
@@ -62,6 +64,7 @@ def eliminar_clase():
             class_code = classes[pos][CLASS_CODE]
             inscripciones_eliminadas = remove_enrollments_by_class(class_code)
             classes.pop(pos)
+            registrar_auditoria("BAJA_CLASE", f"Código={class_code}; inscripciones eliminadas={inscripciones_eliminadas}")
             print("Clase eliminada.")
             if inscripciones_eliminadas > 0:
                 print(f"Se eliminaron {inscripciones_eliminadas} inscripciones asociadas.")
@@ -83,6 +86,7 @@ def modify_clase():
     if pos == -1:
         print("Clase no encontrada.")
     else:
+        anterior = classes[pos][:]
         print(f"Clase actual: {classes[pos][CLASS_NAME]}, Nivel: {get_level_name(classes[pos][CLASS_LEVEL])}, Cupos disponibles: {classes[pos][CLASS_CAPACITY]}")
         nombre = input(f"Nuevo nombre (si para mantener '{classes[pos][CLASS_NAME]}'): ").strip()
         if nombre != "si":
@@ -102,6 +106,8 @@ def modify_clase():
                 print("ERROR, ingresar un número mayor a 0")
                 capacidad = input("Nuevos cupos disponibles: ")
             classes[pos][CLASS_CAPACITY] = int(capacidad)
+        if anterior != classes[pos]:
+            registrar_auditoria("MODIFICACION_CLASE", f"Código={codigo}")
         print(f"Clase modificada: {classes[pos][CLASS_NAME]}, Nivel: {get_level_name(classes[pos][CLASS_LEVEL])}, Cupos disponibles: {classes[pos][CLASS_CAPACITY]}")
 
 def list_clases():

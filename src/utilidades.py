@@ -48,7 +48,7 @@ def search_user_position(username):
     """
     position = -1
     for i in range(len(login_users)):
-        if re.fullmatch(login_users[i][LOGIN_USERNAME], username, re.IGNORECASE):
+        if login_users[i][LOGIN_USERNAME].casefold() == username.strip().casefold():
             position = i
     return position
 
