@@ -9,6 +9,7 @@ import tempfile
 from unittest.mock import patch
 
 RAIZ = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "src"))
 import auditoria
 import datos
@@ -133,25 +134,24 @@ def test_baja_socio_cascada():
     assert auditoria.resumir_auditoria(auditoria.leer_auditoria()) == {"BAJA_INSCRIPCION": 1, "BAJA_SOCIO": 1}
 
 
-def test_cli_real_ambos_puntos_entrada():
+def test_cli_real():
     # El proceso ejecuta el programa real; solo redirige el archivo de auditoría.
-    for entrada in ["main.py", "src/main.py"]:
-        codigo = (
-            "import sys, runpy; from pathlib import Path; "
-            f"sys.path.insert(0, {str(RAIZ / 'src')!r}); import auditoria; "
-            f"auditoria.RUTA_AUDITORIA=Path({str(auditoria.RUTA_AUDITORIA)!r}); "
-            f"runpy.run_path({str(RAIZ / entrada)!r}, run_name='__main__')"
-        )
-        datos_entrada = ["1", "admin", "admin1234", "1", "4", "0", "2", "4", "0", "3", "4", "5", "101", "0", "4", "1", "4", "2", "4", "3", "5", "1", "201", "2", "101", "0", "6", "1", "2", "3", "4", "0", "7", "0"]
-        proceso = subprocess.run([sys.executable, "-B", "-c", codigo], input="\n".join(datos_entrada)+"\n", text=True, capture_output=True, cwd=auditoria.RUTA_AUDITORIA.parent, timeout=15)
-        assert proceso.returncode == 0, proceso.stderr
-        assert "Gracias por usar" in proceso.stdout and "RESUMEN POR OPERACIÓN" in proceso.stdout
-        assert "Entrada interrumpida" not in proceso.stdout
-    assert auditoria.resumir_auditoria(auditoria.leer_auditoria())["CIERRE_SESION"] == 2
+    codigo = (
+        "import sys, runpy; from pathlib import Path; "
+        f"sys.path.insert(0, {str(RAIZ / 'src')!r}); import auditoria; "
+        f"auditoria.RUTA_AUDITORIA=Path({str(auditoria.RUTA_AUDITORIA)!r}); "
+        f"runpy.run_path({str(RAIZ / 'main.py')!r}, run_name='__main__')"
+    )
+    datos_entrada = ["1", "admin", "admin1234", "1", "4", "0", "2", "4", "0", "3", "4", "5", "101", "0", "4", "1", "4", "2", "4", "3", "5", "1", "201", "2", "101", "0", "6", "1", "2", "3", "4", "0", "7", "0"]
+    proceso = subprocess.run([sys.executable, "-B", "-c", codigo], input="\n".join(datos_entrada)+"\n", text=True, capture_output=True, cwd=auditoria.RUTA_AUDITORIA.parent, timeout=15)
+    assert proceso.returncode == 0, proceso.stderr
+    assert "Gracias por usar" in proceso.stdout and "RESUMEN POR OPERACIÓN" in proceso.stdout
+    assert "Entrada interrumpida" not in proceso.stdout
+    assert auditoria.resumir_auditoria(auditoria.leer_auditoria())["CIERRE_SESION"] == 1
 
 
 def test_interrupcion_cierra_sesion():
-    from aplicacion import ejecutar
+    from main import ejecutar
     with patch("builtins.input", side_effect=["1", "admin", "admin1234", EOFError]), contextlib.redirect_stdout(io.StringIO()):
         ejecutar()
     assert auditoria.leer_auditoria()[-1][2] == "CIERRE_SESION"
