@@ -1,3 +1,4 @@
+from auditoria import registrar_auditoria
 from datos import (
     affiliates,
     enrollments,
@@ -75,6 +76,7 @@ def sumar_afiliados():
 
     affiliates.append([nombre, codigo, int(edad), int(affiliate_type), telefono])
 
+    registrar_auditoria("ALTA_SOCIO", f"Código={codigo}")
     print(f"Socio '{nombre}' agregado con código {codigo}.")
 
 def eliminar_afiliados():
@@ -94,6 +96,7 @@ def eliminar_afiliados():
         if confirm.lower() == "s":
             inscripciones_eliminadas = remove_enrollments_by_affiliate(codigo)
             affiliates.pop(pos)
+            registrar_auditoria("BAJA_SOCIO", f"Código={codigo}; inscripciones eliminadas={inscripciones_eliminadas}")
             print("Socio eliminado.")
             if inscripciones_eliminadas > 0:
                 print(f"Se eliminaron {inscripciones_eliminadas} inscripciones asociadas.")
@@ -106,7 +109,8 @@ def remove_enrollment_at(position):
     Parámetros: position, posición de la inscripción que se desea eliminar.
     Salida: no devuelve valores; elimina una fila de la matriz de inscripciones.
     """
-    enrollments.pop(position)
+    eliminado = enrollments.pop(position)
+    registrar_auditoria("BAJA_INSCRIPCION", f"Código={eliminado[0]}; eliminación por baja de socio o clase")
 
 def remove_enrollments_by_affiliate(affiliate_code):
     """
@@ -147,6 +151,7 @@ def modify_affiliate():
     if pos == -1:
         print("Socio no encontrado.")
     else:
+        anterior = affiliates[pos][:]
         print(f"Socio actual: {affiliates[pos][AFF_NAME]}, {affiliates[pos][AFF_AGE]} años, {get_type_name(affiliates[pos][AFF_TYPE])}, teléfono: {affiliates[pos][AFF_PHONE]}")
         nombre = input(f"Nuevo nombre (si para mantener '{affiliates[pos][AFF_NAME]}'): ")
         if nombre != "si":
@@ -170,6 +175,8 @@ def modify_affiliate():
                 print("ERROR, el teléfono debe tener el formato XX-XXXX-XXXX")
                 telefono = input("Nuevo teléfono: ")
             affiliates[pos][AFF_PHONE] = telefono
+        if anterior != affiliates[pos]:
+            registrar_auditoria("MODIFICACION_SOCIO", f"Código={codigo}")
         print(f"Socio modificado: {affiliates[pos][AFF_NAME]}, {affiliates[pos][AFF_AGE]} años, {get_type_name(affiliates[pos][AFF_TYPE])}, teléfono: {affiliates[pos][AFF_PHONE]}")
 
 def list_affiliates():

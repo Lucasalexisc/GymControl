@@ -28,7 +28,7 @@ El sistema se organizó en 11 archivos modulares interconectados más el punto d
 ```
 GymControl/
 ├── tp.py                 # Código original completo de la primera entrega (INTACTO)
-├── main.py               # Punto de entrada desde la raíz (ejecuta src/main.py)
+├── main.py               # Punto de entrada único: autenticación, menú y cierre de sesión
 ├── Documentacion_Modularizacion.md
 └── src/                  # Carpeta con todos los módulos organizados del sistema
     ├── main.py           # Punto de entrada dentro de src

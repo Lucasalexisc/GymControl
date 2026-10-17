@@ -13,10 +13,20 @@ if os.path.exists(ruta_src) and ruta_src not in sys.path:
 
 from login import login
 from menus import main_menu
+from auditoria import cerrar_sesion
+
+
+def ejecutar():
+    """Ejecuta el sistema y cierra la sesión también al interrumpir la entrada."""
+    try:
+        if login():
+            main_menu()
+            print("¡Gracias por usar el sistema de gestión del gimnasio! Hasta luego.")
+    except (EOFError, KeyboardInterrupt):
+        print("\nEntrada interrumpida. Saliendo del sistema.")
+    finally:
+        cerrar_sesion()
+
 
 if __name__ == "__main__":
-    valid_login = login()
-
-    if valid_login:
-        main_menu()
-        print("¡Gracias por usar el sistema de gestión del gimnasio! Hasta luego.")
+    ejecutar()
