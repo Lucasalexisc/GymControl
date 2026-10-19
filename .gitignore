@@ -1,4 +1,24 @@
-.DS_STORE
+/auditoria.txt
+
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-/auditoria.txt
+*$py.class
+
+# macOS
+.DS_Store
+.DS_STORE
+
+# Entornos virtuales (por si usan venv)
+venv/
+.venv/
+env/
+
+# IDEs
+.vscode/
+.idea/
+
+# Python bytecode cache
+**/__pycache__/
+*.py[cod]
+*$py.class
