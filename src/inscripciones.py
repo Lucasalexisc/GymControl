@@ -1,3 +1,4 @@
+from auditoria import registrar_auditoria
 from datos import (
     enrollments,
     classes,
@@ -51,6 +52,7 @@ def alta_inscripcion():
     codigo = 301 if len(enrollments) == 0 else enrollments[-1][ENR_CODE] + 1
     enrollments.append([codigo, int(affiliate_code), int(class_code), 0, 1])
     classes[class_pos][CLASS_CAPACITY] -= 1
+    registrar_auditoria("ALTA_INSCRIPCION", f"Código={codigo}; socio={affiliate_code}; clase={class_code}")
     print("Inscripción realizada con éxito.")
 
 def list_inscripciones():
@@ -126,6 +128,7 @@ def baja_inscripcion():
             enrollments[pos][ENR_STATUS] = 2
             if class_pos != -1:
                 classes[class_pos][CLASS_CAPACITY] += 1
+            registrar_auditoria("BAJA_INSCRIPCION", f"Código={codigo}; finalizada")
             print("Inscripción dada de baja.")
         else:
             print("Operación cancelada.")
@@ -142,6 +145,7 @@ def modify_inscripcion():
     if pos == -1:
         print("Inscripción no encontrada.")
     else:
+        anterior = enrollments[pos][:]
         estado_anterior = enrollments[pos][ENR_STATUS]
         class_pos = search_class_position(enrollments[pos][ENR_CLASS_CODE])
         affiliate_pos = search_affiliate_position(enrollments[pos][ENR_AFFILIATE_CODE])
@@ -178,4 +182,6 @@ def modify_inscripcion():
         class_pos = search_class_position(enrollments[pos][ENR_CLASS_CODE])
         affiliate_name = affiliates[affiliate_pos][AFF_NAME] if affiliate_pos != -1 else "Socio inexistente"
         class_name = classes[class_pos][CLASS_NAME] if class_pos != -1 else "Clase inexistente"
+        if anterior != enrollments[pos]:
+            registrar_auditoria("MODIFICACION_INSCRIPCION", f"Código={codigo}")
         print(f"Inscripción modificada: Socio '{affiliate_name}', Clase '{class_name}', Asistencias: {enrollments[pos][ENR_ATTENDANCE]}, Estado: {'Activa' if enrollments[pos][ENR_STATUS] == 1 else 'Inactiva'}")

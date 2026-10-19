@@ -1,21 +1,21 @@
 # Índices fijos para cada fila de la matriz
-LOGIN_USERNAME, LOGIN_PASSWORD = 0, 1
+LOGIN_USERNAME, LOGIN_PASSWORD, LOGIN_QUESTION, LOGIN_ANSWER = 0, 1, 2, 3
 AFF_NAME, AFF_CODE, AFF_AGE, AFF_TYPE, AFF_PHONE = 0, 1, 2, 3, 4
 CLASS_CODE, CLASS_NAME, CLASS_LEVEL, CLASS_CAPACITY = 0, 1, 2, 3
 ENR_CODE, ENR_AFFILIATE_CODE, ENR_CLASS_CODE, ENR_ATTENDANCE, ENR_STATUS = 0, 1, 2, 3, 4
 
 # Estructuras matriciales
 login_users = [
-    ["admin", "admin1234"],
-    ["recepcion1", "recep123"],
-    ["recepcion2", "recep456"],
-    ["profeyoga", "yoga2026"],
-    ["profebox", "boxeo2026"],
-    ["profezumba", "zumba2026"],
-    ["coordinador", "coord123"],
-    ["ventas1", "ventas123"],
-    ["ventas2", "ventas456"],
-    ["consulta", "consulta123"]
+    ["admin", "admin1234", "¿Cuál es tu color favorito?", "azul"],
+    ["recepcion1", "recep123", "¿Cuál es tu color favorito?", "verde"],
+    ["recepcion2", "recep456", "¿Cuál es tu color favorito?", "rojo"],
+    ["profeyoga", "yoga2026", "¿Cuál es tu color favorito?", "violeta"],
+    ["profebox", "boxeo2026", "¿Cuál es tu color favorito?", "negro"],
+    ["profezumba", "zumba2026", "¿Cuál es tu color favorito?", "amarillo"],
+    ["coordinador", "coord123", "¿Cuál es tu color favorito?", "blanco"],
+    ["ventas1", "ventas123", "¿Cuál es tu color favorito?", "naranja"],
+    ["ventas2", "ventas456", "¿Cuál es tu color favorito?", "celeste"],
+    ["consulta", "consulta123", "¿Cuál es tu color favorito?", "gris"]
 ]
 
 affiliates = [
