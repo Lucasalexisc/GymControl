@@ -1,3 +1,5 @@
+import unicodedata
+
 from datos import (
 clases ,
 CLASE_CODIGO ,
@@ -15,6 +17,18 @@ pedir_entero
 from utilidades import buscar_posicion_clase
 from socios import eliminar_inscripciones_por_clase
 
+def normalizar_dia (dia ):
+    return "".join (
+        caracter
+        for caracter in unicodedata .normalize ("NFD",dia .strip ().casefold ())
+        if unicodedata .category (caracter )!="Mn"
+    )
+
+DIAS_SEMANA ={
+    normalizar_dia (dia ):dia
+    for dia in ("Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo")
+}
+
 def es_hora_valida (hora ):
     partes =hora .split (":")
     return (
@@ -24,13 +38,23 @@ def es_hora_valida (hora ):
         and 0 <=int (partes [1 ])<=59
     )
 
+def hora_a_minutos (hora ):
+    horas ,minutos =(int (parte )for parte in hora .split (":"))
+    return horas *60 +minutos
+
 def pedir_horario ():
     """Solicita un bloque horario y devuelve una tupla inmutable."""
     dias_ingresados =input ("Días de cursada separados por coma: ").strip ()
-    while not dias_ingresados or any (not dia .strip ()for dia in dias_ingresados .split (",")):
-        print ("ERROR, ingrese al menos un día válido.")
+    while (
+        not dias_ingresados
+        or any (normalizar_dia (dia )not in DIAS_SEMANA for dia in dias_ingresados .split (","))
+    ):
+        print ("ERROR, ingrese uno o más días de la semana válidos, separados por coma.")
         dias_ingresados =input ("Días de cursada separados por coma: ").strip ()
-    dias =tuple (dia .strip ().capitalize ()for dia in dias_ingresados .split (","))
+    dias =tuple (
+        DIAS_SEMANA [normalizar_dia (dia )]
+        for dia in dias_ingresados .split (",")
+    )
 
     hora_inicio =input ("Hora de inicio (HH:MM): ").strip ()
     while not es_hora_valida (hora_inicio ):
@@ -38,7 +62,7 @@ def pedir_horario ():
         hora_inicio =input ("Hora de inicio (HH:MM): ").strip ()
 
     hora_fin =input ("Hora de fin (HH:MM): ").strip ()
-    while not es_hora_valida (hora_fin )or hora_fin <=hora_inicio :
+    while not es_hora_valida (hora_fin )or hora_a_minutos (hora_fin )<=hora_a_minutos (hora_inicio ):
         print ("ERROR, ingrese una hora posterior a la de inicio en formato HH:MM.")
         hora_fin =input ("Hora de fin (HH:MM): ").strip ()
 
