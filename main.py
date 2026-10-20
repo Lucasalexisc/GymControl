@@ -13,10 +13,18 @@ if os .path .exists (ruta_src )and ruta_src not in sys .path :
 
 from login import iniciar_sesion
 from menus import menu_principal
+from auditoria import cerrar_sesion
 
-if __name__ =="__main__":
-    inicio_sesion_valido =iniciar_sesion ()
+def ejecutar():
+    try:
+        if iniciar_sesion():
+            menu_principal()
+            print("¡Gracias por usar el sistema de gestión del gimnasio! Hasta luego.")
+    except (EOFError, KeyboardInterrupt):
+        print("\nEntrada interrumpida. Saliendo del sistema.")
+    finally:
+        cerrar_sesion()
 
-    if inicio_sesion_valido :
-        menu_principal ()
-        print ("¡Gracias por usar el sistema de gestión del gimnasio! Hasta luego.")
+
+if __name__ == "__main__":
+    ejecutar()

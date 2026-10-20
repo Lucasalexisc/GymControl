@@ -1,21 +1,21 @@
 # Índices fijos para cada fila de la matriz
-INDICE_NOMBRE_USUARIO ,INDICE_CONTRASENA =0 ,1
+INDICE_NOMBRE_USUARIO ,INDICE_CONTRASENA ,INDICE_PREGUNTA ,INDICE_RESPUESTA =0 ,1 ,2 ,3
 SOCIO_NOMBRE ,SOCIO_CODIGO ,SOCIO_EDAD ,SOCIO_TIPO ,SOCIO_TELEFONO =0 ,1 ,2 ,3 ,4
 CLASE_CODIGO ,CLASE_NOMBRE ,CLASE_NIVEL ,CLASE_CUPOS ,CLASE_HORARIO =0 ,1 ,2 ,3 ,4
 INSCRIPCION_CODIGO ,INSCRIPCION_CODIGO_SOCIO ,INSCRIPCION_CODIGO_CLASE ,INSCRIPCION_ASISTENCIAS ,INSCRIPCION_ESTADO =0 ,1 ,2 ,3 ,4
 
 # Estructuras matriciales
 usuarios_inicio_sesion =[
-["admin","admin1234"],
-["recepcion1","recep123"],
-["recepcion2","recep456"],
-["profeyoga","yoga2026"],
-["profebox","boxeo2026"],
-["profezumba","zumba2026"],
-["coordinador","coord123"],
-["ventas1","ventas123"],
-["ventas2","ventas456"],
-["consulta","consulta123"]
+["admin","admin1234","¿Cuál es tu color favorito?","azul"],
+["recepcion1","recep123","¿Cuál es tu color favorito?","verde"],
+["recepcion2","recep456","¿Cuál es tu color favorito?","rojo"],
+["profeyoga","yoga2026","¿Cuál es tu color favorito?","violeta"],
+["profebox","boxeo2026","¿Cuál es tu color favorito?","negro"],
+["profezumba","zumba2026","¿Cuál es tu color favorito?","amarillo"],
+["coordinador","coord123","¿Cuál es tu color favorito?","blanco"],
+["ventas1","ventas123","¿Cuál es tu color favorito?","naranja"],
+["ventas2","ventas456","¿Cuál es tu color favorito?","celeste"],
+["consulta","consulta123","¿Cuál es tu color favorito?","gris"]
 ]
 
 socios =[

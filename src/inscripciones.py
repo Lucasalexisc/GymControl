@@ -1,3 +1,4 @@
+from auditoria import registrar_auditoria
 from datos import (
 inscripciones ,
 clases ,
@@ -51,6 +52,7 @@ def alta_inscripcion ():
     codigo =301 if len (inscripciones )==0 else inscripciones [-1 ][INSCRIPCION_CODIGO ]+1
     inscripciones .append ([codigo ,int (codigo_socio ),int (codigo_clase ),0 ,1 ])
     clases [posicion_clase ][CLASE_CUPOS ]-=1
+    registrar_auditoria("ALTA_INSCRIPCION", f"Código={codigo}; socio={codigo_socio}; clase={codigo_clase}")
     print ("Inscripción realizada con éxito.")
 
 def listar_inscripciones ():
@@ -126,6 +128,7 @@ def baja_inscripcion ():
             inscripciones [posicion ][INSCRIPCION_ESTADO ]=2
             if posicion_clase !=-1 :
                 clases [posicion_clase ][CLASE_CUPOS ]+=1
+            registrar_auditoria("BAJA_INSCRIPCION", f"Código={codigo}; finalizada")
             print ("Inscripción dada de baja.")
         else :
             print ("Operación cancelada.")
@@ -142,6 +145,7 @@ def modificar_inscripcion ():
     if posicion ==-1 :
         print ("Inscripción no encontrada.")
     else :
+        inscripcion_anterior =inscripciones [posicion ][:]
         estado_anterior =inscripciones [posicion ][INSCRIPCION_ESTADO ]
         posicion_clase =buscar_posicion_clase (inscripciones [posicion ][INSCRIPCION_CODIGO_CLASE ])
         posicion_socio =buscar_posicion_socio (inscripciones [posicion ][INSCRIPCION_CODIGO_SOCIO ])
@@ -178,4 +182,6 @@ def modificar_inscripcion ():
         posicion_clase =buscar_posicion_clase (inscripciones [posicion ][INSCRIPCION_CODIGO_CLASE ])
         nombre_socio =socios [posicion_socio ][SOCIO_NOMBRE ]if posicion_socio !=-1 else "Socio inexistente"
         nombre_clase =clases [posicion_clase ][CLASE_NOMBRE ]if posicion_clase !=-1 else "Clase inexistente"
+        if inscripcion_anterior !=inscripciones [posicion ]:
+            registrar_auditoria("MODIFICACION_INSCRIPCION", f"Código={codigo}")
         print (f"Inscripción modificada: Socio '{nombre_socio}', Clase '{nombre_clase}', Asistencias: {inscripciones[posicion][INSCRIPCION_ASISTENCIAS]}, Estado: {'Activa' if inscripciones[posicion][INSCRIPCION_ESTADO] == 1 else 'Inactiva'}")

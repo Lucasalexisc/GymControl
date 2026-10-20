@@ -1,3 +1,4 @@
+from auditoria import mostrar_auditoria
 from validaciones import es_entero
 from clases import (
 sumar_clase ,
@@ -287,7 +288,7 @@ def pedir_opcion_principal ():
     """
     Objetivo: solicitar y validar una opción del menú principal.
     Parámetros: ninguno.
-    Salida: opción elegida como número entero entre 0 y 6.
+    Salida: opción elegida como número entero entre 0 y 7.
     """
     print ("--- MENU PRINCIPAL ---")
     print ("Opción 1: Gestión de afiliados")
@@ -296,9 +297,10 @@ def pedir_opcion_principal ():
     print ("Opción 4: Ordenamiento")
     print ("Opción 5: Búsqueda")
     print ("Opción 6: Cálculos estadísticos matriciales")
+    print ("Opción 7: Historial de auditoría")
     print ("Opción 0: Salir")
     opcion_ingresada =input ("Ingrese una opción: ")
-    while not es_entero (opcion_ingresada )or int (opcion_ingresada )<0 or int (opcion_ingresada )>6 :
+    while not es_entero (opcion_ingresada )or int (opcion_ingresada )<0 or int (opcion_ingresada )>7 :
         print ("La opción ingresada es errónea, por favor ingrese una opción válida.")
         print ("--- MENU PRINCIPAL ---")
         print ("Opción 1: Gestión de afiliados")
@@ -307,6 +309,7 @@ def pedir_opcion_principal ():
         print ("Opción 4: Ordenamiento")
         print ("Opción 5: Búsqueda")
         print ("Opción 6: Cálculos estadísticos matriciales")
+        print ("Opción 7: Historial de auditoría")
         print ("Opción 0: Salir")
         opcion_ingresada =input ("Ingrese una opción: ")
     opcion =int (opcion_ingresada )
@@ -332,4 +335,6 @@ def menu_principal ():
             opcion_menu_busqueda ()
         elif opcion ==6 :
             menu_matriz ()
+        elif opcion ==7 :
+            mostrar_auditoria ()
         opcion =pedir_opcion_principal ()

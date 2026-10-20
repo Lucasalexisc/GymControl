@@ -1,3 +1,4 @@
+from auditoria import registrar_auditoria
 from datos import (
 socios ,
 inscripciones ,
@@ -79,6 +80,7 @@ def sumar_afiliados ():
 
     socios .append ([nombre ,codigo ,int (edad ),int (tipo_socio ),telefono ])
 
+    registrar_auditoria("ALTA_SOCIO", f"Código={codigo}")
     print (f"Socio '{nombre}' agregado con código {codigo}.")
 
 def eliminar_afiliados ():
@@ -99,6 +101,7 @@ def eliminar_afiliados ():
             cupos_liberados =liberar_cupos_de_afiliado (codigo ,inscripciones ,clases )
             inscripciones_eliminadas =eliminar_inscripciones_por_socio (codigo )
             socios .pop (posicion )
+            registrar_auditoria("BAJA_SOCIO", f"Código={codigo}; inscripciones eliminadas={inscripciones_eliminadas}")
             print ("Socio eliminado.")
             if inscripciones_eliminadas >0 :
                 print (f"Se eliminaron {inscripciones_eliminadas} inscripciones asociadas.")
@@ -113,7 +116,8 @@ def eliminar_inscripcion_en_posicion (posicion ):
     Parámetros: posicion, posición de la inscripción que se desea eliminar.
     Salida: no devuelve valores; elimina una fila de la matriz de inscripciones.
     """
-    inscripciones .pop (posicion )
+    eliminado =inscripciones .pop (posicion )
+    registrar_auditoria("BAJA_INSCRIPCION", f"Código={eliminado[0]}; eliminada por baja de socio o clase")
 
 def eliminar_inscripciones_por_socio (codigo_socio ):
     """
@@ -169,6 +173,7 @@ def modificar_socio ():
     if posicion ==-1 :
         print ("Socio no encontrado.")
     else :
+        socio_anterior =socios [posicion ][:]
         opcion =-1
         while opcion !=0 :
             print (f"\nSocio: {socios[posicion][SOCIO_NOMBRE]} | Edad: {socios[posicion][SOCIO_EDAD]} | Tipo: {obtener_nombre_tipo(socios[posicion][SOCIO_TIPO])} | Teléfono: {socios[posicion][SOCIO_TELEFONO]}")
@@ -201,6 +206,8 @@ def modificar_socio ():
 
             if opcion !=0 :
                 print ("Atributo modificado correctamente.")
+        if socio_anterior !=socios [posicion ]:
+            registrar_auditoria("MODIFICACION_SOCIO", f"Código={codigo}")
 
 def listar_socios ():
     """

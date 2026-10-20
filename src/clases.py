@@ -1,4 +1,5 @@
 import unicodedata
+from auditoria import registrar_auditoria
 
 from datos import (
 clases ,
@@ -102,6 +103,7 @@ def sumar_clase ():
     codigo =201 if len (clases )==0 else clases [-1 ][CLASE_CODIGO ]+1
     clases .append ([codigo ,nombre ,nivel ,capacidad ,horario ])
 
+    registrar_auditoria("ALTA_CLASE", f"Código={codigo}")
     print (f"Clase '{nombre}' agregada con código {codigo}.")
 
 def eliminar_clase ():
@@ -124,6 +126,7 @@ def eliminar_clase ():
             codigo_clase =clases [posicion ][CLASE_CODIGO ]
             inscripciones_eliminadas =eliminar_inscripciones_por_clase (codigo_clase )
             clases .pop (posicion )
+            registrar_auditoria("BAJA_CLASE", f"Código={codigo_clase}; inscripciones eliminadas={inscripciones_eliminadas}")
             print ("Clase eliminada.")
             if inscripciones_eliminadas >0 :
                 print (f"Se eliminaron {inscripciones_eliminadas} inscripciones asociadas.")
@@ -145,6 +148,7 @@ def modificar_clase ():
     if posicion ==-1 :
         print ("Clase no encontrada.")
     else :
+        clase_anterior =clases [posicion ][:]
         opcion =-1
         while opcion !=0 :
             print (f"\nClase: {clases[posicion][CLASE_NOMBRE]} | Nivel: {obtener_nombre_nivel(clases[posicion][CLASE_NIVEL])} | Cupos: {clases[posicion][CLASE_CUPOS]} | Horario: {formatear_horario(clases[posicion][CLASE_HORARIO])}")
@@ -172,6 +176,8 @@ def modificar_clase ():
 
             if opcion !=0 :
                 print ("Atributo modificado correctamente.")
+        if clase_anterior !=clases [posicion ]:
+            registrar_auditoria("MODIFICACION_CLASE", f"Código={codigo}")
 
 def listar_clases ():
     """

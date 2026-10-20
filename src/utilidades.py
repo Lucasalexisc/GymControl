@@ -48,7 +48,7 @@ def buscar_posicion_usuario (nombre_usuario ):
     """
     posicion =-1
     for indice in range (len (usuarios_inicio_sesion )):
-        if re .fullmatch (usuarios_inicio_sesion [indice ][INDICE_NOMBRE_USUARIO ],nombre_usuario ,re .IGNORECASE ):
+        if usuarios_inicio_sesion [indice ][INDICE_NOMBRE_USUARIO ].casefold ()==nombre_usuario .strip ().casefold ():
             posicion =indice
     return posicion
 
