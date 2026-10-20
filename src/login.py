@@ -1,17 +1,19 @@
 from datos import (
-    login_users, LOGIN_USERNAME, LOGIN_PASSWORD, LOGIN_QUESTION, LOGIN_ANSWER,
+    usuarios_inicio_sesion,
+    INDICE_NOMBRE_USUARIO,
+    INDICE_CONTRASENA,
+    INDICE_PREGUNTA,
+    INDICE_RESPUESTA,
 )
-from utilidades import search_user_position
+from utilidades import buscar_posicion_usuario
 from auditoria import establecer_usuario, registrar_auditoria
 
-
 def normalizar_respuesta(respuesta):
-    """Ignora mayúsculas y espacios redundantes, pero conserva las tildes."""
     return " ".join(respuesta.split()).casefold()
 
 
-def login():
-    """Permite reintentar ambos métodos sin límite o salir voluntariamente."""
+def iniciar_sesion():
+    """Autentica con contraseña o pregunta de seguridad hasta salir."""
     establecer_usuario("sin_sesion")
     while True:
         print("--- INICIO DE SESIÓN ---")
@@ -25,22 +27,24 @@ def login():
         if opcion not in ("1", "2"):
             print("Opción inválida. Elija 1, 2 o 0.")
             continue
+
         usuario = input("Ingrese su nombre de usuario: ").strip()
-        posicion = search_user_position(usuario)
+        posicion = buscar_posicion_usuario(usuario)
         metodo = "contraseña" if opcion == "1" else "pregunta de seguridad"
         if opcion == "1":
-            clave = input("Ingrese su contraseña: ")
-            valido = posicion != -1 and login_users[posicion][LOGIN_PASSWORD] == clave
+            credencial = input("Ingrese su contraseña: ")
+            valido = posicion != -1 and usuarios_inicio_sesion[posicion][INDICE_CONTRASENA] == credencial
+        elif posicion == -1:
+            valido = False
         else:
-            if posicion == -1:
-                registrar_auditoria("ACCESO_FALLIDO", metodo, usuario=usuario)
-                print("No se pudo iniciar sesión. Revise el usuario o utilice contraseña.")
-                continue
-            print(login_users[posicion][LOGIN_QUESTION])
-            respuesta = normalizar_respuesta(input("Respuesta: "))
-            valido = bool(respuesta) and respuesta == normalizar_respuesta(login_users[posicion][LOGIN_ANSWER])
+            print(usuarios_inicio_sesion[posicion][INDICE_PREGUNTA])
+            credencial = normalizar_respuesta(input("Respuesta: "))
+            valido = bool(credencial) and credencial == normalizar_respuesta(
+                usuarios_inicio_sesion[posicion][INDICE_RESPUESTA]
+            )
+
         if valido:
-            establecer_usuario(login_users[posicion][LOGIN_USERNAME])
+            establecer_usuario(usuarios_inicio_sesion[posicion][INDICE_NOMBRE_USUARIO])
             registrar_auditoria("ACCESO_EXITOSO", metodo)
             print("¡Bienvenido al sistema de gestión del gimnasio!")
             return True

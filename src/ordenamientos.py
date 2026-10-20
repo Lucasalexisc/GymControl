@@ -1,76 +1,77 @@
 from datos import (
-    affiliates,
-    classes,
-    enrollments,
-    AFF_AGE,
-    AFF_CODE,
-    AFF_NAME,
-    AFF_TYPE,
-    CLASS_LEVEL,
-    CLASS_CODE,
-    CLASS_NAME,
-    CLASS_CAPACITY,
-    ENR_ATTENDANCE,
-    ENR_CODE,
-    ENR_AFFILIATE_CODE,
-    ENR_CLASS_CODE,
-    ENR_STATUS,
-    get_type_name
+socios ,
+clases ,
+inscripciones ,
+SOCIO_EDAD ,
+SOCIO_CODIGO ,
+SOCIO_NOMBRE ,
+SOCIO_TIPO ,
+CLASE_NIVEL ,
+CLASE_CODIGO ,
+CLASE_NOMBRE ,
+CLASE_CUPOS ,
+CLASE_HORARIO ,
+INSCRIPCION_ASISTENCIAS ,
+INSCRIPCION_CODIGO ,
+INSCRIPCION_CODIGO_SOCIO ,
+INSCRIPCION_CODIGO_CLASE ,
+INSCRIPCION_ESTADO ,
+obtener_nombre_tipo
 )
 
-def ordenar_socios_por_edad():
+def ordenar_socios_por_edad ():
     """
     Objetivo: mostrar los socios ordenados de menor a mayor edad.
     Parámetros: ninguno.
     Salida: no devuelve valores; muestra una copia ordenada de los socios.
     """
-    afiliados_ordenados = [fila[:] for fila in affiliates]
-    n = len(afiliados_ordenados)
-    for i in range(n - 1):
-        pos_min = i
-        for j in range(i + 1, n):
-            if afiliados_ordenados[j][AFF_AGE] < afiliados_ordenados[pos_min][AFF_AGE]:
-                pos_min = j
-        afiliados_ordenados[i], afiliados_ordenados[pos_min] = afiliados_ordenados[pos_min], afiliados_ordenados[i]
+    afiliados_ordenados =[fila [:]for fila in socios ]
+    cantidad =len (afiliados_ordenados )
+    for indice in range (cantidad -1 ):
+        posicion_minima =indice
+        for indice_comparacion in range (indice +1 ,cantidad ):
+            if afiliados_ordenados [indice_comparacion ][SOCIO_EDAD ]<afiliados_ordenados [posicion_minima ][SOCIO_EDAD ]:
+                posicion_minima =indice_comparacion
+        afiliados_ordenados [indice ],afiliados_ordenados [posicion_minima ]=afiliados_ordenados [posicion_minima ],afiliados_ordenados [indice ]
 
-    print("SOCIOS ORDENADOS POR EDAD (Selección)")
-    for row in afiliados_ordenados:
-        print(f"Código: {row[AFF_CODE]}, Nombre: {row[AFF_NAME]}, Edad: {row[AFF_AGE]}, Tipo: {get_type_name(row[AFF_TYPE])}")
+    print ("SOCIOS ORDENADOS POR EDAD (Selección)")
+    for fila in afiliados_ordenados :
+        print (f"Código: {fila[SOCIO_CODIGO]}, Nombre: {fila[SOCIO_NOMBRE]}, Edad: {fila[SOCIO_EDAD]}, Tipo: {obtener_nombre_tipo(fila[SOCIO_TIPO])}")
 
-def ordenar_clases_por_nivel():
+def ordenar_clases_por_nivel ():
     """
     Objetivo: mostrar las clases ordenadas de menor a mayor nivel.
     Parámetros: ninguno.
     Salida: no devuelve valores; muestra una copia ordenada de las clases.
     """
-    clases_ordenadas = [fila[:] for fila in classes]
-    n = len(clases_ordenadas)
-    for i in range(1, n):
-        clave_nivel = clases_ordenadas[i][CLASS_LEVEL]
-        clave_fila = clases_ordenadas[i][:]
-        j = i - 1
-        while j >= 0 and clases_ordenadas[j][CLASS_LEVEL] > clave_nivel:
-            clases_ordenadas[j + 1] = clases_ordenadas[j][:]
-            j -= 1
-        clases_ordenadas[j + 1] = clave_fila
+    clases_ordenadas =[fila [:]for fila in clases ]
+    cantidad =len (clases_ordenadas )
+    for indice in range (1 ,cantidad ):
+        clave_nivel =clases_ordenadas [indice ][CLASE_NIVEL ]
+        clave_fila =clases_ordenadas [indice ][:]
+        indice_comparacion =indice -1
+        while indice_comparacion >=0 and clases_ordenadas [indice_comparacion ][CLASE_NIVEL ]>clave_nivel :
+            clases_ordenadas [indice_comparacion +1 ]=clases_ordenadas [indice_comparacion ][:]
+            indice_comparacion -=1
+        clases_ordenadas [indice_comparacion +1 ]=clave_fila
 
-    print("CLASES ORDENADAS POR NIVEL (Inserción)")
-    for row in clases_ordenadas:
-        print(f"Código: {row[CLASS_CODE]}, Nombre: {row[CLASS_NAME]}, Nivel: {row[CLASS_LEVEL]}, Cupos disponibles: {row[CLASS_CAPACITY]}")
+    print ("CLASES ORDENADAS POR NIVEL (Inserción)")
+    for fila in clases_ordenadas :
+        print (f"Código: {fila[CLASE_CODIGO]}, Nombre: {fila[CLASE_NOMBRE]}, Nivel: {fila[CLASE_NIVEL]}, Cupos disponibles: {fila[CLASE_CUPOS]}, Horario: {fila[CLASE_HORARIO]}")
 
-def ordenar_inscripciones_por_asistencias():
+def ordenar_inscripciones_por_asistencias ():
     """
     Objetivo: mostrar las inscripciones ordenadas de menor a mayor cantidad de asistencias.
     Parámetros: ninguno.
     Salida: no devuelve valores; muestra una copia ordenada de las inscripciones.
     """
-    inscripciones_ordenadas = [fila[:] for fila in enrollments]
-    n = len(inscripciones_ordenadas)
-    for i in range(n - 1):
-        for j in range(0, n - 1 - i):
-            if inscripciones_ordenadas[j][ENR_ATTENDANCE] > inscripciones_ordenadas[j + 1][ENR_ATTENDANCE]:
-                inscripciones_ordenadas[j], inscripciones_ordenadas[j + 1] = inscripciones_ordenadas[j + 1], inscripciones_ordenadas[j]
+    inscripciones_ordenadas =[fila [:]for fila in inscripciones ]
+    cantidad =len (inscripciones_ordenadas )
+    for indice in range (cantidad -1 ):
+        for indice_comparacion in range (0 ,cantidad -1 -indice ):
+            if inscripciones_ordenadas [indice_comparacion ][INSCRIPCION_ASISTENCIAS ]>inscripciones_ordenadas [indice_comparacion +1 ][INSCRIPCION_ASISTENCIAS ]:
+                inscripciones_ordenadas [indice_comparacion ],inscripciones_ordenadas [indice_comparacion +1 ]=inscripciones_ordenadas [indice_comparacion +1 ],inscripciones_ordenadas [indice_comparacion ]
 
-    print("INSCRIPCIONES ORDENADAS POR ASISTENCIAS (Burbujeo)")
-    for row in inscripciones_ordenadas:
-        print(f"Código: {row[ENR_CODE]}, Socio: {row[ENR_AFFILIATE_CODE]}, Clase: {row[ENR_CLASS_CODE]}, Asistencias: {row[ENR_ATTENDANCE]}, Estado: {row[ENR_STATUS]}")
+    print ("INSCRIPCIONES ORDENADAS POR ASISTENCIAS (Burbujeo)")
+    for fila in inscripciones_ordenadas :
+        print (f"Código: {fila[INSCRIPCION_CODIGO]}, Socio: {fila[INSCRIPCION_CODIGO_SOCIO]}, Clase: {fila[INSCRIPCION_CODIGO_CLASE]}, Asistencias: {fila[INSCRIPCION_ASISTENCIAS]}, Estado: {fila[INSCRIPCION_ESTADO]}")

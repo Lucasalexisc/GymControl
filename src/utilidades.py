@@ -1,99 +1,99 @@
 import re
 from datos import (
-    classes,
-    affiliates,
-    enrollments,
-    login_users,
-    CLASS_CODE,
-    AFF_CODE,
-    LOGIN_USERNAME,
-    ENR_CODE,
-    ENR_AFFILIATE_CODE,
-    ENR_CLASS_CODE,
-    ENR_STATUS
+clases ,
+socios ,
+inscripciones ,
+usuarios_inicio_sesion ,
+CLASE_CODIGO ,
+SOCIO_CODIGO ,
+INDICE_NOMBRE_USUARIO ,
+INSCRIPCION_CODIGO ,
+INSCRIPCION_CODIGO_SOCIO ,
+INSCRIPCION_CODIGO_CLASE ,
+INSCRIPCION_ESTADO
 )
 
-def search_position(rows, condition):
+def buscar_posicion (filas ,condicion ):
     """
     Objetivo: encontrar la posición de la primera fila que cumpla una condición.
-    Parámetros: rows, matriz donde buscar; condition, función que evalúa cada fila.
+    Parámetros: filas, matriz donde buscar; condicion, función que evalúa cada fila.
     Salida: posición de la fila o -1 si ninguna cumple la condición.
     """
-    positions = list(filter(lambda i: condition(rows[i]), range(len(rows))))
-    if len(positions) > 0:
-        return positions[0]
+    posiciones =list (filter (lambda indice :condicion (filas [indice ]),range (len (filas ))))
+    if len (posiciones )>0 :
+        return posiciones [0 ]
     return -1
 
-def search_class_position(code):
+def buscar_posicion_clase (code ):
     """
     Objetivo: encontrar la posición de una clase a partir de su código.
     Parámetros: code, código de la clase buscada.
     Salida: posición de la clase o -1 si no existe.
     """
-    return search_position(classes, lambda row: row[CLASS_CODE] == code)
+    return buscar_posicion (clases ,lambda fila :fila [CLASE_CODIGO ]==code )
 
-def search_affiliate_position(code):
+def buscar_posicion_socio (code ):
     """
     Objetivo: encontrar la posición de un socio a partir de su código.
     Parámetros: code, código del socio buscado.
     Salida: posición del socio o -1 si no existe.
     """
-    return search_position(affiliates, lambda row: row[AFF_CODE] == code)
+    return buscar_posicion (socios ,lambda fila :fila [SOCIO_CODIGO ]==code )
 
-def search_user_position(username):
+def buscar_posicion_usuario (nombre_usuario ):
     """
     Objetivo: encontrar la posición de un usuario sin distinguir mayúsculas de minúsculas.
-    Parámetros: username, nombre de usuario buscado.
+    Parámetros: nombre_usuario, nombre de usuario buscado.
     Salida: posición del usuario o -1 si no existe.
     """
-    position = -1
-    for i in range(len(login_users)):
-        if login_users[i][LOGIN_USERNAME].casefold() == username.strip().casefold():
-            position = i
-    return position
+    posicion =-1
+    for indice in range (len (usuarios_inicio_sesion )):
+        if usuarios_inicio_sesion [indice ][INDICE_NOMBRE_USUARIO ].casefold ()==nombre_usuario .strip ().casefold ():
+            posicion =indice
+    return posicion
 
-def does_class_code_exist(code):
+def existe_codigo_clase (code ):
     """
     Objetivo: determinar si existe una clase con un código específico.
     Parámetros: code, código de la clase buscada.
     Salida: True si la clase existe; False en caso contrario.
     """
-    for row in classes:
-        if row[CLASS_CODE] == code:
+    for fila in clases :
+        if fila [CLASE_CODIGO ]==code :
             return True
     return False
 
-def does_affiliate_code_exist(code):
+def existe_codigo_socio (code ):
     """
     Objetivo: determinar si existe un socio con un código específico.
     Parámetros: code, código del socio buscado.
     Salida: True si el socio existe; False en caso contrario.
     """
-    for row in affiliates:
-        if row[AFF_CODE] == code:
+    for fila in socios :
+        if fila [SOCIO_CODIGO ]==code :
             return True
     return False
 
-def is_affiliate_enrolled_in_class(affiliate_code, class_code):
+def socio_esta_inscripto_en_clase (codigo_socio ,codigo_clase ):
     """
     Objetivo: determinar si un socio ya posee una inscripción activa en una clase utilizando lambda y filter.
-    Parámetros: affiliate_code (int), class_code (int).
+    Parámetros: codigo_socio (int), codigo_clase (int).
     Salida: True si el afiliado ya está inscripto activamente; False en caso contrario.
     """
-    inscripciones_previas = list(filter(
-        lambda enr: enr[ENR_AFFILIATE_CODE] == affiliate_code and enr[ENR_CLASS_CODE] == class_code and enr[ENR_STATUS] == 1,
-        enrollments
+    inscripciones_previas =list (filter (
+    lambda inscripcion :inscripcion [INSCRIPCION_CODIGO_SOCIO ]==codigo_socio and inscripcion [INSCRIPCION_CODIGO_CLASE ]==codigo_clase and inscripcion [INSCRIPCION_ESTADO ]==1 ,
+    inscripciones
     ))
-    return len(inscripciones_previas) > 0
+    return len (inscripciones_previas )>0
 
-def search_inscription_position(code):
+def buscar_posicion_inscripcion (code ):
     """
     Objetivo: encontrar la posición de una inscripción a partir de su código.
     Parámetros: code, código de la inscripción buscada.
     Salida: posición de la inscripción o -1 si no existe.
     """
-    position = -1
-    for i in range(len(enrollments)):
-        if enrollments[i][ENR_CODE] == code:
-            position = i
-    return position
+    posicion =-1
+    for indice in range (len (inscripciones )):
+        if inscripciones [indice ][INSCRIPCION_CODIGO ]==code :
+            posicion =indice
+    return posicion
