@@ -180,4 +180,4 @@ def ejecutar_pruebas():
 
 
 if __name__ == "__main__":
-    ejecutar_pruebas()
+    sys.exit(0 if ejecutar_pruebas() else 1)
