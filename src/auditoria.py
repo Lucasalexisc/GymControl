@@ -1,8 +1,8 @@
 """Auditoría incremental en texto UTF-8, sin almacenar credenciales."""
 from datetime import datetime
-from pathlib import Path
+import os
 
-RUTA_AUDITORIA = Path(__file__).resolve().parent.parent / "auditoria.txt"
+RUTA_AUDITORIA = os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "auditoria.txt")
 usuario_actual = "sin_sesion"
 
 
@@ -22,7 +22,7 @@ def registrar_auditoria(operacion, detalle, usuario=None):
     fecha = datetime.now().astimezone().isoformat(timespec="seconds")
     campos = [fecha, usuario_actual if usuario is None else usuario, operacion, detalle]
     try:
-        with RUTA_AUDITORIA.open("a", encoding="utf-8") as archivo:
+        with open(RUTA_AUDITORIA, "a", encoding="utf-8") as archivo:
             archivo.write(" | ".join(limpiar_campo(campo) for campo in campos) + "\n")
         return True
     except OSError:
@@ -34,7 +34,7 @@ def leer_auditoria():
     """Lee eventos válidos; devuelve None ante errores y [] si aún no existe."""
     eventos = []
     try:
-        with RUTA_AUDITORIA.open(encoding="utf-8") as archivo:
+        with open(RUTA_AUDITORIA, encoding="utf-8") as archivo:
             for linea in archivo:
                 campos = linea.rstrip("\n").split(" | ")
                 if len(campos) != 4:
