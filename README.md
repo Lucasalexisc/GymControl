@@ -57,7 +57,8 @@ La integración final incluye la [PR #8](https://github.com/rodrings/GymControl/
 
 ## Documentación
 
-- [Documentación final para entregar (PDF)](Documentacion/old/Documentacion_GymControl.pdf)
+- [Documentación de la segunda entrega y pendientes](Documentacion/Documentacion_TP2.md)
+- [Documentación de la primera entrega (PDF)](Documentacion/old/Documentacion_GymControl.pdf)
 - [Propuesta y alcance](Documentacion/old/GymControl.md)
 - [Documentación final con portada](Documentacion/old/documentacion_gymcontrol.md)
 - [Estado, modificaciones y pendientes](Documentacion/old/Modificaciones.md)
@@ -83,8 +84,37 @@ una operación puede completarse aunque no pueda registrarse en el archivo.
 El archivo es local y editable, no un registro a prueba de manipulaciones.
 Los datos del gimnasio siguen en memoria; únicamente la auditoría persiste.
 
-Pruebas automáticas sin dependencias externas ni clases:
+## Pruebas y estado de la segunda entrega
+
+Pruebas de regresión de autenticación y auditoría, sin paquetes externos ni clases propias:
 
 ```bash
-python3 tests/test_autenticacion_auditoria.py
+python3 -B tests/test_autenticacion_auditoria.py
 ```
+
+Usan archivos temporales y no modifican la auditoría del gimnasio. Devuelven código
+`0` si todas pasan y `1` si alguna falla. Ejecutarlas sin `-O`, ya que usan `assert`.
+La ruta de `auditoria.txt` se calcula con `os.path` y se abre con `open()`; sigue
+apuntando a la raíz del proyecto aunque se inicie desde otra carpeta.
+
+Las diez pruebas generales están propuestas en la [PR #5](https://github.com/Lucasalexisc/GymControl/pull/5).
+Cuando esté integrada, también se podrán ejecutar con:
+
+```bash
+python3 test_gymcontrol.py
+```
+
+Ese archivo no forma parte de esta rama. La modificación por atributo de inscripciones
+está propuesta en la [PR #4](https://github.com/Lucasalexisc/GymControl/pull/4).
+Estado revisado al 26 de octubre de 2026: ambas PR siguen pendientes de integración.
+
+La persistencia JSON y los reportes con conjuntos todavía están pendientes.
+No existe aún un procedimiento para guardar y recuperar socios, clases e
+inscripciones entre ejecuciones. La documentación de JSON se completará cuando
+se integre y se pruebe ese flujo.
+
+Se retiró `pathlib` de auditoría. Sigue pendiente confirmar con la cátedra la
+autorización de `datetime` y de los demás módulos usados, incluidos los de pruebas;
+que sean parte de la biblioteca estándar no confirma su autorización académica.
+El alcance y las tareas restantes están en la
+[documentación de la segunda entrega](Documentacion/Documentacion_TP2.md).
