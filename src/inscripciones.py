@@ -144,44 +144,50 @@ def modificar_inscripcion ():
     posicion =buscar_posicion_inscripcion (codigo )
     if posicion ==-1 :
         print ("Inscripción no encontrada.")
+        return
+
+    posicion_clase =buscar_posicion_clase (inscripciones [posicion ][INSCRIPCION_CODIGO_CLASE ])
+    posicion_socio =buscar_posicion_socio (inscripciones [posicion ][INSCRIPCION_CODIGO_SOCIO ])
+    nombre_socio =socios [posicion_socio ][SOCIO_NOMBRE ]if posicion_socio !=-1 else "Socio inexistente"
+    nombre_clase =clases [posicion_clase ][CLASE_NOMBRE ]if posicion_clase !=-1 else "Clase inexistente"
+    print (f"Inscripción actual: Socio '{nombre_socio}', Clase '{nombre_clase}', Asistencias: {inscripciones[posicion][INSCRIPCION_ASISTENCIAS]}, Estado: {'Activa' if inscripciones[posicion][INSCRIPCION_ESTADO] == 1 else 'Inactiva'}")
+    print ("1. Modificar solo asistencias")
+    print ("2. Modificar solo estado")
+    print ("3. Modificar asistencias y estado")
+    print ("0. Cancelar")
+    opcion =pedir_entero ("Seleccione una opción: ","Opción inválida, ingrese un número entre 0 y 3.",0 ,3 )
+    if opcion ==0 :
+        print ("Operación cancelada.")
+        return
+
+    inscripcion_anterior =inscripciones [posicion ][:]
+    estado_anterior =inscripciones [posicion ][INSCRIPCION_ESTADO ]
+    asistencias_actuales =inscripciones [posicion ][INSCRIPCION_ASISTENCIAS ]
+    nuevo_estado =estado_anterior
+    nuevas_asistencias =asistencias_actuales
+
+    if opcion ==1 or opcion ==3 :
+        nuevas_asistencias =pedir_entero ("Nuevas asistencias: ","ERROR, las asistencias deben ser un número mayor o igual a 0.",0 )
+    if opcion ==2 or opcion ==3 :
+        nuevo_estado =pedir_entero ("Nuevo estado (1-Activa, 2-Inactiva): ","ERROR, estado entre 1 y 2.",1 ,2 )
+
+    if estado_anterior ==2 and nuevo_estado ==1 :
+        if posicion_clase ==-1 :
+            print ("No se puede activar porque la clase no existe.")
+            return
+        if clases [posicion_clase ][CLASE_CUPOS ]<=0 :
+            print ("No hay cupos disponibles para activar esta inscripción.")
+            return
+
+    inscripciones [posicion ][INSCRIPCION_ASISTENCIAS ]=nuevas_asistencias
+    inscripciones [posicion ][INSCRIPCION_ESTADO ]=nuevo_estado
+    if estado_anterior ==1 and nuevo_estado ==2 and posicion_clase !=-1 :
+        clases [posicion_clase ][CLASE_CUPOS ]+=1
+    elif estado_anterior ==2 and nuevo_estado ==1 :
+        clases [posicion_clase ][CLASE_CUPOS ]-=1
+
+    if inscripcion_anterior !=inscripciones [posicion ]:
+        registrar_auditoria("MODIFICACION_INSCRIPCION", f"Código={codigo}")
+        print (f"Inscripción modificada: Socio '{nombre_socio}', Clase '{nombre_clase}', Asistencias: {nuevas_asistencias}, Estado: {'Activa' if nuevo_estado == 1 else 'Inactiva'}")
     else :
-        inscripcion_anterior =inscripciones [posicion ][:]
-        estado_anterior =inscripciones [posicion ][INSCRIPCION_ESTADO ]
-        posicion_clase =buscar_posicion_clase (inscripciones [posicion ][INSCRIPCION_CODIGO_CLASE ])
-        posicion_socio =buscar_posicion_socio (inscripciones [posicion ][INSCRIPCION_CODIGO_SOCIO ])
-        nombre_socio =socios [posicion_socio ][SOCIO_NOMBRE ]if posicion_socio !=-1 else "Socio inexistente"
-        nombre_clase =clases [posicion_clase ][CLASE_NOMBRE ]if posicion_clase !=-1 else "Clase inexistente"
-        print (f"Inscripción actual: Socio '{nombre_socio}', Clase '{nombre_clase}', Asistencias: {inscripciones[posicion][INSCRIPCION_ASISTENCIAS]}, Estado: {'Activa' if inscripciones[posicion][INSCRIPCION_ESTADO] == 1 else 'Inactiva'}")
-        asistencias =input (f"Nuevas asistencias (si para mantener {inscripciones[posicion][INSCRIPCION_ASISTENCIAS]}): ")
-        if asistencias !="si":
-            while not es_entero (asistencias )or int (asistencias )<0 :
-                print ("ERROR, las asistencias deben ser un número mayor o igual a 0")
-                asistencias =input ("Nuevas asistencias: ")
-            inscripciones [posicion ][INSCRIPCION_ASISTENCIAS ]=int (asistencias )
-        estado =input (f"Nuevo estado -1-Activa 2-Inactiva- (si para mantener {'Activa' if inscripciones[posicion][INSCRIPCION_ESTADO] == 1 else 'Inactiva'}): ")
-        if estado !="si":
-            while not es_entero (estado )or int (estado )<1 or int (estado )>2 :
-                print ("ERROR, estado entre 1 y 2")
-                estado =input ("Nuevo estado: ")
-            nuevo_estado =int (estado )
-            if estado_anterior ==1 and nuevo_estado ==2 :
-                inscripciones [posicion ][INSCRIPCION_ESTADO ]=nuevo_estado
-                if posicion_clase !=-1 :
-                    clases [posicion_clase ][CLASE_CUPOS ]+=1
-            elif estado_anterior ==2 and nuevo_estado ==1 :
-                if posicion_clase ==-1 :
-                    print ("No se puede activar porque la clase no existe.")
-                elif clases [posicion_clase ][CLASE_CUPOS ]<=0 :
-                    print ("No hay cupos disponibles para activar esta inscripción.")
-                else :
-                    inscripciones [posicion ][INSCRIPCION_ESTADO ]=nuevo_estado
-                    clases [posicion_clase ][CLASE_CUPOS ]-=1
-            else :
-                inscripciones [posicion ][INSCRIPCION_ESTADO ]=nuevo_estado
-        posicion_socio =buscar_posicion_socio (inscripciones [posicion ][INSCRIPCION_CODIGO_SOCIO ])
-        posicion_clase =buscar_posicion_clase (inscripciones [posicion ][INSCRIPCION_CODIGO_CLASE ])
-        nombre_socio =socios [posicion_socio ][SOCIO_NOMBRE ]if posicion_socio !=-1 else "Socio inexistente"
-        nombre_clase =clases [posicion_clase ][CLASE_NOMBRE ]if posicion_clase !=-1 else "Clase inexistente"
-        if inscripcion_anterior !=inscripciones [posicion ]:
-            registrar_auditoria("MODIFICACION_INSCRIPCION", f"Código={codigo}")
-        print (f"Inscripción modificada: Socio '{nombre_socio}', Clase '{nombre_clase}', Asistencias: {inscripciones[posicion][INSCRIPCION_ASISTENCIAS]}, Estado: {'Activa' if inscripciones[posicion][INSCRIPCION_ESTADO] == 1 else 'Inactiva'}")
+        print ("La inscripción no tuvo cambios.")
