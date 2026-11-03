@@ -99,11 +99,11 @@ def listar_clases_socio ():
     if posicion ==-1 :
         print ("Error,socio no encontrado")
         return
-    clases =clases_de_socio (codigo )
-    if not clases :
+    nombres_clases =clases_de_socio (codigo )
+    if not nombres_clases :
         print ("El socio no tiene clases activas")
     else :
-        print (f"El socio {socios[posicion][SOCIO_NOMBRE]} tiene las clases: {', '.join(clases)}")
+        print (f"El socio {socios[posicion][SOCIO_NOMBRE]} tiene las clases: {', '.join(nombres_clases)}")
 
 def baja_inscripcion ():
     """
@@ -123,7 +123,7 @@ def baja_inscripcion ():
         posicion_clase =buscar_posicion_clase (inscripciones [posicion ][INSCRIPCION_CODIGO_CLASE ])
         nombre_socio =socios [posicion_socio ][SOCIO_NOMBRE ]if posicion_socio !=-1 else "Socio inexistente"
         nombre_clase =clases [posicion_clase ][CLASE_NOMBRE ]if posicion_clase !=-1 else "Clase inexistente"
-        confirmacion =input (f"¿Seguro que desea dar de baja la inscripción del socio '{nombre_socio}' en la clase '{nombre_clase}' ? (s/cantidad): ")
+        confirmacion =input (f"¿Seguro que desea dar de baja la inscripción del socio '{nombre_socio}' en la clase '{nombre_clase}' ? (s/n): ")
         if confirmacion .lower ()=="s":
             inscripciones [posicion ][INSCRIPCION_ESTADO ]=2
             if posicion_clase !=-1 :

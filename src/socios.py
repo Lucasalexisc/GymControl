@@ -22,34 +22,6 @@ es_telefono_valido
 )
 from utilidades import buscar_posicion_socio ,buscar_posicion
 
-# Gestión de socios ==> Este codigo habria que eliminarlo ya que no lo llaman en ninguna parte LC 2/9
-def pedir_opcion ():
-    """
-    Objetivo: solicitar y validar una opción del menú de gestión de socios.
-    Parámetros: ninguno.
-    Salida: opción elegida como número entero entre 0 y 4.
-    """
-    print ("Opcion 1: sumar afiliado")
-    print ("Opcion 2: eliminar afiliado")
-    print ("Opcion 3: modificar afiliado")
-    print ("Opcion 4: listar afiliados")
-    print ("Opcion 0: salir")
-
-    opcion =pedir_entero ("Ingrese una opcion: ","El dato ingresado es erroneo, por favor ingrese una opcion valida.",0 ,4 )
-
-    while opcion <0 or opcion >4 :
-        print ("El dato ingresado es erroneo, por favor ingrese una opcion valida.")
-
-        print ("Opcion 1: sumar afiliado")
-        print ("Opcion 2: eliminar afiliado")
-        print ("Opcion 3: modificar afiliado")
-        print ("Opcion 4: listar afiliados")
-        print ("Opcion 0: salir")
-
-        opcion =pedir_entero ("Ingrese una opcion: ","El dato ingresado es erroneo, por favor ingrese una opcion valida.",0 ,4 )
-
-    return opcion
-
 def sumar_afiliados ():
     """
     Objetivo: registrar un nuevo socio con código generado automáticamente.
@@ -95,7 +67,7 @@ def eliminar_afiliados ():
     if posicion ==-1 :
         print ("Socio no encontrado.")
     else :
-        print (f"¿Seguro que desea eliminar a '{socios[posicion][SOCIO_NOMBRE]}' (teléfono: {socios[posicion][SOCIO_TELEFONO]})? (s/cantidad)")
+        print (f"¿Seguro que desea eliminar a '{socios[posicion][SOCIO_NOMBRE]}' (teléfono: {socios[posicion][SOCIO_TELEFONO]})? (s/n)")
         confirmacion =input ()
         if confirmacion .lower ()=="s":
             cupos_liberados =liberar_cupos_de_afiliado (codigo ,inscripciones ,clases )

@@ -9,7 +9,7 @@ def es_entero (valor ):
     try :
         valor =int (valor )
         resultado =True
-    except :
+    except (ValueError ,TypeError ):
         resultado =False
     return resultado
 
@@ -22,26 +22,13 @@ def es_flotante (valor ):
     try :
         valor =float (valor )
         resultado =True
-    except :
-        resultado =False
-    return resultado
-
-def es_string (valor ):
-    """
-    Objetivo: determinar si un valor puede convertirse en una cadena de caracteres.
-    Parámetros: valor, dato que se desea validar.
-    Salida: True si el valor es convertible a cadena; False en caso contrario.
-    """
-    try :
-        valor =str (valor )
-        resultado =True
-    except :
+    except (ValueError ,TypeError ):
         resultado =False
     return resultado
 
 def es_nombre_clase_valido (nombre ):
     """
-    Objetivo: validar que un nombre de clase contenga únicamente letras sin espacios.
+    Objetivo: validar que un nombre de clase contenga únicamente letras y espacios.
     Parámetros: nombre, cadena que se desea validar.
     Salida: coincidencia encontrada si el nombre es válido; None en caso contrario.
     """
