@@ -179,15 +179,15 @@ def menu_busqueda ():
     Salida: opción elegida como número entero entre 0 y 2.
     """
     print ("--- MENÚ DE BÚSQUEDA ---")
-    print ("Opción 1: Buscar clase por código (Binaria)")
-    print ("Opción 2: Buscar socio por código (Secuencial)")
+    print ("Opción 1: Buscar clase por código ")
+    print ("Opción 2: Buscar socio por código ")
     print ("Opción 0: Volver al menú principal")
     opcion_ingresada =input ("Ingrese una opción: ")
     while not es_entero (opcion_ingresada )or int (opcion_ingresada )<0 or int (opcion_ingresada )>2 :
         print ("La opción ingresada es errónea, por favor ingrese una opción válida.")
         print ("--- MENÚ DE BÚSQUEDA ---")
-        print ("Opción 1: Buscar clase por código (Binaria)")
-        print ("Opción 2: Buscar socio por código (Secuencial)")
+        print ("Opción 1: Buscar clase por código ")
+        print ("Opción 2: Buscar socio por código ")
         print ("Opción 0: Volver al menú principal")
         opcion_ingresada =input ("Ingrese una opción: ")
     return int (opcion_ingresada )
@@ -213,17 +213,17 @@ def menu_ordenamiento ():
     Salida: opción elegida como número entero entre 0 y 3.
     """
     print ("--- MENÚ DE ORDENAMIENTO ---")
-    print ("Opción 1: Ordenar socios por edad (Selección)")
-    print ("Opción 2: Ordenar clases por nivel (Inserción)")
-    print ("Opción 3: Ordenar inscripciones por asistencias (Burbujeo)")
+    print ("Opción 1: Ordenar socios por edad ")
+    print ("Opción 2: Ordenar clases por nivel ")
+    print ("Opción 3: Ordenar inscripciones por asistencias ")
     print ("Opción 0: Volver al menú principal")
     opcion_ingresada =input ("Ingrese una opción: ")
     while not es_entero (opcion_ingresada )or int (opcion_ingresada )<0 or int (opcion_ingresada )>3 :
         print ("La opción ingresada es errónea, por favor ingrese una opción válida.")
         print ("--- MENÚ DE ORDENAMIENTO ---")
-        print ("Opción 1: Ordenar socios por edad (Selección)")
-        print ("Opción 2: Ordenar clases por nivel (Inserción)")
-        print ("Opción 3: Ordenar inscripciones por asistencias (Burbujeo)")
+        print ("Opción 1: Ordenar socios por edad ")
+        print ("Opción 2: Ordenar clases por nivel")
+        print ("Opción 3: Ordenar inscripciones por asistencias ")
         print ("Opción 0: Volver al menú principal")
         opcion_ingresada =input ("Ingrese una opción: ")
     return int (opcion_ingresada )
