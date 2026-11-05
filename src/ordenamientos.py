@@ -24,16 +24,9 @@ def ordenar_socios_por_edad():
     Parámetros: ninguno.
     Salida: no devuelve valores; muestra una copia ordenada de los socios.
     """
-    afiliados_ordenados = [fila[:] for fila in affiliates]
-    n = len(afiliados_ordenados)
-    for i in range(n - 1):
-        pos_min = i
-        for j in range(i + 1, n):
-            if afiliados_ordenados[j][AFF_AGE] < afiliados_ordenados[pos_min][AFF_AGE]:
-                pos_min = j
-        afiliados_ordenados[i], afiliados_ordenados[pos_min] = afiliados_ordenados[pos_min], afiliados_ordenados[i]
+    afiliados_ordenados = sorted(affiliates, key=lambda fila: fila[AFF_AGE])
 
-    print("SOCIOS ORDENADOS POR EDAD (Selección)")
+    print("SOCIOS ORDENADOS POR EDAD")
     for row in afiliados_ordenados:
         print(f"Código: {row[AFF_CODE]}, Nombre: {row[AFF_NAME]}, Edad: {row[AFF_AGE]}, Tipo: {get_type_name(row[AFF_TYPE])}")
 
@@ -43,18 +36,9 @@ def ordenar_clases_por_nivel():
     Parámetros: ninguno.
     Salida: no devuelve valores; muestra una copia ordenada de las clases.
     """
-    clases_ordenadas = [fila[:] for fila in classes]
-    n = len(clases_ordenadas)
-    for i in range(1, n):
-        clave_nivel = clases_ordenadas[i][CLASS_LEVEL]
-        clave_fila = clases_ordenadas[i][:]
-        j = i - 1
-        while j >= 0 and clases_ordenadas[j][CLASS_LEVEL] > clave_nivel:
-            clases_ordenadas[j + 1] = clases_ordenadas[j][:]
-            j -= 1
-        clases_ordenadas[j + 1] = clave_fila
+    clases_ordenadas = sorted(classes, key=lambda fila: fila[CLASS_LEVEL])
 
-    print("CLASES ORDENADAS POR NIVEL (Inserción)")
+    print("CLASES ORDENADAS POR NIVEL")
     for row in clases_ordenadas:
         print(f"Código: {row[CLASS_CODE]}, Nombre: {row[CLASS_NAME]}, Nivel: {row[CLASS_LEVEL]}, Cupos disponibles: {row[CLASS_CAPACITY]}")
 
@@ -64,13 +48,8 @@ def ordenar_inscripciones_por_asistencias():
     Parámetros: ninguno.
     Salida: no devuelve valores; muestra una copia ordenada de las inscripciones.
     """
-    inscripciones_ordenadas = [fila[:] for fila in enrollments]
-    n = len(inscripciones_ordenadas)
-    for i in range(n - 1):
-        for j in range(0, n - 1 - i):
-            if inscripciones_ordenadas[j][ENR_ATTENDANCE] > inscripciones_ordenadas[j + 1][ENR_ATTENDANCE]:
-                inscripciones_ordenadas[j], inscripciones_ordenadas[j + 1] = inscripciones_ordenadas[j + 1], inscripciones_ordenadas[j]
+    inscripciones_ordenadas = sorted(enrollments, key=lambda fila: fila[ENR_ATTENDANCE])
 
-    print("INSCRIPCIONES ORDENADAS POR ASISTENCIAS (Burbujeo)")
+    print("INSCRIPCIONES ORDENADAS POR ASISTENCIAS")
     for row in inscripciones_ordenadas:
         print(f"Código: {row[ENR_CODE]}, Socio: {row[ENR_AFFILIATE_CODE]}, Clase: {row[ENR_CLASS_CODE]}, Asistencias: {row[ENR_ATTENDANCE]}, Estado: {row[ENR_STATUS]}")
