@@ -1,11 +1,11 @@
 # GymControl — Documentación de la segunda entrega
 
 **Materia:** Algoritmos y Estructura de Datos 1 / Programación 1 — UADE.
-**Fecha de revisión:** 26 de octubre de 2026.
+**Fecha de revisión:** 3 de noviembre de 2026.
 **Responsable de esta documentación:** Javier Candalaft.
 **Estado:** documentación del alcance implementado; la entrega completa tiene pendientes de integración.
 
-Este documento cubre los seis apartados del punto 15 de la consigna. Describe la base `main` en `5422a3b` y los ajustes de auditoría, pruebas y documentación de esta rama. Las funcionalidades de otras ramas se identifican como pendientes y no se presentan como terminadas.
+Este documento cubre los seis apartados del punto 15 de la consigna. Describe el código de `main` en `f81342a` y esta actualización documental. El 3 de noviembre se verificó que el HEAD remoto coincide con esa versión y que no hay PR abiertas. La entrega es el 5 de noviembre. JSON y conjuntos siguen pendientes; esta documentación no da por cumplidos esos requisitos.
 
 ## a. Mejoras respecto de la primera parte
 
@@ -14,13 +14,13 @@ GymControl permite administrar socios, clases e inscripciones desde una interfaz
 - **Autenticación:** ingreso con contraseña o pregunta de seguridad. Permite reintentar sin un límite fijo, cambiar de método o salir con la opción `0`. El usuario se busca sin distinguir mayúsculas y espacios exteriores; la contraseña se compara exactamente. La respuesta de seguridad normaliza mayúsculas y espacios redundantes.
 - **Auditoría:** registro persistente de accesos exitosos, fallidos y cancelados, cierre de sesión y altas, bajas y modificaciones. La opción `7` del menú principal permite consultar el historial y el conteo de operaciones.
 - **Horarios de clases:** días de la semana y horas de inicio y fin, con validación de días y comparación de horas convertidas a minutos.
-- **Modificación por atributo:** submenús para editar socios y clases.
+- **Modificación por atributo:** submenús para editar socios, clases e inscripciones. En inscripciones se pueden modificar las asistencias, el estado o ambos; los cambios de estado ajustan los cupos y no se permite reactivar sin cupo.
 - **Liberación de cupos:** al eliminar un socio se recuperan los cupos de sus inscripciones activas y se eliminan sus inscripciones asociadas.
 - **Salida controlada:** `main.py` coordina el login y el menú, maneja `EOFError` y `KeyboardInterrupt` y ejecuta el cierre de sesión en `finally`.
 
-En esta rama se reemplazó `pathlib.Path` por `os.path` y `open()` en auditoría. La ruta sigue siendo absoluta y relativa al archivo del módulo: ejecutar el programa desde otra carpeta no cambia la ubicación de `auditoria.txt`.
+Se reemplazó `pathlib.Path` por `os.path` y `open()` en auditoría. La ruta sigue siendo absoluta y relativa al archivo del módulo: ejecutar el programa desde otra carpeta no cambia la ubicación de `auditoria.txt`.
 
-La modificación por atributo de inscripciones está propuesta en la [PR #4](https://github.com/Lucasalexisc/GymControl/pull/4). Las diez pruebas generales y la limpieza de funciones sin uso están en la [PR #5](https://github.com/Lucasalexisc/GymControl/pull/5). Ambas estaban abiertas al momento de esta revisión.
+La modificación por atributo de inscripciones ([PR #4](https://github.com/Lucasalexisc/GymControl/pull/4)), las diez pruebas generales y la limpieza de funciones sin uso ([PR #5](https://github.com/Lucasalexisc/GymControl/pull/5)), y la adecuación de auditoría ([PR #6](https://github.com/Lucasalexisc/GymControl/pull/6)) ya están integradas en `main`.
 
 ## b. Estructuras de datos
 
@@ -68,18 +68,18 @@ El plan asigna a Edney la carga y el guardado en JSON. Cuando se integre, habrá
 | Fallo al leer o decodificar auditoría | `OSError` o `UnicodeError`: se avisa y se devuelve `None`, distinto de un historial vacío. |
 | Fecha inválida en una línea | `ValueError`: se omite esa línea y continúa la lectura. |
 | Fin de entrada o interrupción por teclado | `main.py` captura `EOFError` y `KeyboardInterrupt` y ejecuta el cierre en `finally`. |
-| Datos numéricos inválidos | Las funciones de validación y los menús solicitan un nuevo ingreso cuando corresponde. La especificación de `ValueError` y `TypeError` en lugar de `except:` está propuesta en la PR #5. |
+| Datos numéricos inválidos | Las funciones de validación y los menús solicitan un nuevo ingreso cuando corresponde. `es_entero()` y `es_flotante()` capturan específicamente `ValueError` y `TypeError`. |
 | Días u horas inválidos | Se solicita un nuevo ingreso. La hora final debe ser posterior a la inicial, comparando minutos. |
 
 ### Restricciones de la cátedra pendientes de confirmar
 
-Esta rama elimina `pathlib` de auditoría y conserva `datetime` para generar y validar las fechas existentes. No hay evidencia en el repositorio de que `datetime` y sus métodos hayan sido autorizados en clase. Javier debe confirmarlo con el docente y adaptar el registro si corresponde.
+La implementación elimina `pathlib` de auditoría y conserva `datetime` para generar y validar las fechas existentes. No hay evidencia en el repositorio de que `datetime` y sus métodos hayan sido autorizados en clase. Javier confirmó el 3 de noviembre que la consulta todavía no está resuelta. Debe confirmarlo con el docente y adaptar el registro si corresponde.
 
 La consigna exige usar módulos vistos o autorizados: pertenecer a la biblioteca estándar no alcanza para afirmar que un módulo está permitido. También queda pendiente la revisión de `unicodedata` en horarios, asignada a Tomás. Las pruebas complementarias usan módulos estándar para aislar archivos y simular entradas; su uso también debe poder explicarse y validarse con la cátedra. No se incorporan clases propias, bases de datos ni paquetes externos.
 
 ## e. Pruebas
 
-### Regresión de autenticación y auditoría incluida en esta rama
+### Regresión de autenticación y auditoría
 
 Desde la raíz del proyecto:
 
@@ -104,9 +104,9 @@ Las pruebas usan archivos temporales y no modifican `auditoria.txt` del gimnasio
 | Cierre | `cerrar_sesion` | Registra un único cierre y limpia la identidad. |
 | Otra carpeta de ejecución | Inicialización de la ruta de auditoría | Conserva la ruta de la raíz del proyecto. |
 
-### Diez pruebas generales propuestas en la PR #5
+### Diez pruebas generales integradas
 
-Estas pruebas se ejecutarán con `python3 test_gymcontrol.py` cuando se integre esa PR. No están incluidas en esta rama y no se sustituyen por las pruebas de regresión anteriores.
+Se ejecutan desde la raíz con `python3 -B test_gymcontrol.py`. Son independientes del programa principal y complementan las pruebas de regresión anteriores.
 
 | N.º | Categoría | Función | Caso y resultado esperado |
 |---|---|---|---|
@@ -121,7 +121,9 @@ Estas pruebas se ejecutarán con `python3 test_gymcontrol.py` cuando se integre 
 | 9 | Límite | `liberar_cupos_de_afiliado` | Socio sin inscripciones → cero cupos liberados. |
 | 10 | Negocio | `liberar_cupos_de_afiliado` | Una inscripción activa y otra inactiva → recupera solo el cupo activo. |
 
-La distribución propuesta es 4 válidos, 3 inválidos, 2 límites y 1 caso de negocio, sobre 7 funciones. Antes de integrar la PR #5 falta propagar su resultado al código de salida para que una prueba fallida también sea detectable por automatizaciones.
+La distribución implementada es 4 válidos, 3 inválidos, 2 límites y 1 caso de negocio, sobre 7 funciones. Cada prueba muestra la función, los datos, el resultado esperado, el obtenido y su estado. El ejecutor devuelve código `0` si todas pasan y `1` si alguna falla.
+
+**Verificación del 3 de noviembre de 2026:** 10/10 pruebas generales y 12/12 de autenticación y auditoría aprobadas, ambas suites con código de salida `0`. Se ejecutaron con Python 3 en macOS. Este resultado no valida JSON ni conjuntos, que todavía no existen en el sistema.
 
 ## f. Cambios respecto de la primera parte y cierre de entrega
 
@@ -131,15 +133,28 @@ La distribución propuesta es 4 válidos, 3 inválidos, 2 límites y 1 caso de n
 | Ingreso con contraseña | Contraseña o pregunta de seguridad. |
 | Operaciones sin historial persistente | Auditoría en texto, consulta y conteos. |
 | Clases sin bloque horario | Tuplas con días y horas validadas. |
-| Edición secuencial de atributos | Submenús para socios y clases; inscripciones pendiente de PR #4. |
+| Edición secuencial de atributos | Submenús para socios, clases e inscripciones. |
 | Problema de cupos al eliminar socios | Recuperación de cupos de las inscripciones activas. |
 
-### Pendientes para cerrar el documento de entrega
+### Pendientes para cerrar la entrega
 
-- **Javier:** confirmar las librerías con la cátedra y actualizar este documento y el README después de integrar los cambios pendientes.
-- **Lucas:** integrar las diez pruebas generales de la PR #5 con su código de salida corregido.
-- **Tomás:** integrar el submenú de inscripciones de la PR #4 y resolver la revisión de librerías y detalles de presentación asignados en el plan.
-- **Edney:** implementar JSON, conjuntos y los cambios de ordenamientos y diccionarios definidos en el plan.
-- **Equipo:** probar la versión integrada, verificar recuperación tras reinicio, completar la documentación con resultados reales y preparar los archivos y la defensa.
+| Responsable | Pendiente verificado |
+|---|---|
+| Javier | Confirmar con la cátedra la autorización de `datetime` y los módulos utilizados. Completar las secciones de JSON y conjuntos cuando se integre y pruebe su implementación. README y documentación actualizados al estado comprobado. |
+| Lucas | Las diez pruebas y la limpieza asignadas ya están integradas. Participar de la prueba integral final. |
+| Tomás | Resolver `unicodedata`; formatear horarios en búsqueda binaria y ordenamiento por nivel; cambiar `(s/cantidad)` por `(s/n)` en la baja de clases; traducir `code` a `codigo` en utilidades. El submenú de inscripciones y las confirmaciones de baja de socios e inscripciones ya están integrados. |
+| Edney | Implementar carga/guardado JSON y recuperación de tuplas, reportes con conjuntos, diccionarios de niveles/tipos y reemplazo de ordenamientos manuales por `sorted()`. |
+| Equipo | Validar el ciclo modificar → guardar → cerrar → abrir → recuperar; probar en otro equipo, preparar los archivos de entrega y practicar la defensa. |
 
-La documentación queda organizada para la entrega, pero no certifica como terminadas las funciones que todavía faltan. El [plan de implementación](Plan_Implementacion_TP2.md) conserva la asignación de tareas; su estado deberá actualizarse al integrar las ramas.
+Los diccionarios ya se utilizan en auditoría y días de la semana: el requisito existe, aunque la ampliación de Edney sigue pendiente. JSON y conjuntos son los principales requisitos obligatorios todavía ausentes.
+
+### Preparación y comprobación final (§16 y §17)
+
+1. Integrar las tareas pendientes del [plan de implementación](Plan_Implementacion_TP2.md).
+2. Ejecutar ambas suites de pruebas y comprobar sus códigos de salida.
+3. Validar la persistencia JSON tras reiniciar, incluidos horarios y cupos; documentar los resultados reales y el tratamiento de archivos inválidos o inexistentes.
+4. Entregar código, pruebas, documentación y los archivos de texto y JSON necesarios. `auditoria.txt` se genera al ejecutar y está excluido de Git: incluir un historial de demostración sin datos personales. El JSON de entrega queda pendiente de su implementación.
+5. Seguir el README en otro equipo con Python 3.9 o posterior y comprobar login, ABM, reportes y recuperación de datos.
+6. Repasar entre todos las estructuras, validaciones, excepciones, archivos y pruebas para la defensa.
+
+La documentación describe lo comprobado; el cierre definitivo depende de integrar y verificar las funcionalidades faltantes y confirmar las restricciones de módulos con la cátedra.
