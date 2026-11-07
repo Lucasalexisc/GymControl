@@ -15,7 +15,7 @@ Credenciales de demostración:
 - Usuario: `admin`
 - Contraseña: `admin1234`
 
-Los datos se mantienen en memoria y vuelven a su estado inicial al reiniciar el programa.
+Los datos se mantienen en memoria y vuelven a su estado inicial al reiniciar el programa (persistencia JSON en proceso de integración).
 
 ## Alcance implementado
 
@@ -24,22 +24,21 @@ Los datos se mantienen en memoria y vuelven a su estado inicial al reiniciar el 
 - Gestión de socios, clases e inscripciones, con modificación por atributo.
 - Control de cupos y prevención de inscripciones activas duplicadas.
 - Búsqueda secuencial y binaria.
-- Ordenamientos por selección, inserción y burbujeo.
+- Ordenamientos mediante `sorted()`.
+- Diccionarios para conteo de auditoría, normalización de días y catálogos de niveles de clase y tipos de socio.
 - Reportes matriciales.
 - Uso efectivo de `map`, `filter`, `reduce` y expresiones regulares.
 - Función genérica de búsqueda con `filter` y funciones lambda para localizar socios y clases.
-
-La primera entrega incluye la [PR #8](https://github.com/rodrings/GymControl/pull/8) de Tomás, con la gestión completa del teléfono, y la [PR #9](https://github.com/rodrings/GymControl/pull/9) de Edney, con la función genérica de búsqueda. Ambas están integradas a `main`.
 
 ## Equipo y ramas
 
 | Integrante | Rama | Aporte principal |
 |---|---|---|
 | Javier Candalaft | `dev-canda` | Base del sistema, login, auditoría, `reduce`, regex y documentación. |
-| Lucas Cragaris | `dev-lucas` | Clases por socio, prevención de duplicados y validación de nombres. |
+| Lucas Cragaris | `dev-lucas` / `dev-lucas-2` | Modularización, liberación de cupos, pruebas unitarias, clases por socio, prevención de duplicados y validación de nombres. |
 | Rodrigo García Solá | `dev-rodri` | Refactor de las estructuras y operaciones a matrices. |
-| Tomás van Nynatten | `dev-tom` | Incorporación y gestión del teléfono de los socios. |
-| Edney Ribeiro | `dev-ed` | Función genérica `buscar_posicion()` y búsquedas de socios y clases mediante `filter` y lambda. |
+| Tomás van Nynatten | `dev-tom` / `dev-tom-2` | Incorporación y gestión del teléfono, horarios con tuplas y submenús de modificación por atributo. |
+| Edney Ribeiro | `dev-ed` / `dev-ed2-entrega` | Función genérica `buscar_posicion()`, diccionarios de tipos/niveles y ordenamientos con `sorted()`. |
 
 ## Capturas de funcionamiento
 
@@ -57,6 +56,8 @@ La primera entrega incluye la [PR #8](https://github.com/rodrings/GymControl/pul
 
 ## Documentación
 
+- [Estado actual y pendientes del equipo (7/11)](Documentacion/Pendientes_Equipo_TP2.md)
+- [Plan de implementación actualizado (7/11)](Documentacion/Plan_Implementacion_TP2.md)
 - [Documentación de la segunda entrega y pendientes](Documentacion/Documentacion_TP2.md)
 - [Documentación de la primera entrega (PDF)](Documentacion/old/Documentacion_GymControl.pdf)
 - [Propuesta y alcance](Documentacion/old/GymControl.md)
@@ -81,8 +82,6 @@ las bajas en cascada también registran las inscripciones eliminadas.
 La opción 7 muestra el historial y un conteo por operación. Las líneas con formato
 inválido se omiten. Ante errores de lectura/escritura se avisa y el programa continúa;
 una operación puede completarse aunque no pueda registrarse en el archivo.
-El archivo es local y editable, no un registro a prueba de manipulaciones.
-Los datos del gimnasio siguen en memoria; únicamente la auditoría persiste.
 
 ## Pruebas y estado de la segunda entrega
 
@@ -91,11 +90,6 @@ Pruebas de regresión de autenticación y auditoría, sin paquetes externos ni c
 ```bash
 python3 -B tests/test_autenticacion_auditoria.py
 ```
-
-Usan archivos temporales y no modifican la auditoría del gimnasio. Devuelven código
-`0` si todas pasan y `1` si alguna falla. Ejecutarlas sin `-O`, ya que usan `assert`.
-La ruta de `auditoria.txt` se calcula con `os.path` y se abre con `open()`; sigue
-apuntando a la raíz del proyecto aunque se inicie desde otra carpeta.
 
 Las diez pruebas generales ya están integradas y se ejecutan con:
 
@@ -106,32 +100,17 @@ python3 -B test_gymcontrol.py
 Cubren 7 funciones: 4 casos válidos, 3 inválidos, 2 límites y 1 de negocio.
 El proceso devuelve `0` si todas pasan y `1` si alguna falla.
 
-**Verificación al 3 de noviembre de 2026:** sobre `main` en `f81342a`, pasaron
+**Verificación al 7 de noviembre de 2026:** sobre `main` en `a07d82c`, pasaron
 10/10 pruebas generales y 12/12 de autenticación y auditoría, con salida `0`.
-Las PR #4 (inscripciones), #5 (pruebas y limpieza) y #6 (auditoría y documentación)
-ya están integradas. El HEAD remoto coincide con la copia local y no hay PR abiertas
-al momento de esta revisión.
+Las PR #4 (inscripciones), #5 (pruebas y limpieza), #6/#7 (auditoría y documentación)
+y #8 (diccionarios de tipos/niveles y `sorted()`) ya están integradas.
 
-La persistencia JSON y los reportes con conjuntos todavía están pendientes.
-No existe aún un procedimiento para guardar y recuperar socios, clases e
-inscripciones entre ejecuciones. La documentación de JSON se completará cuando
-se integre y se pruebe ese flujo.
+## Qué falta para cerrar la entrega
 
-Se retiró `pathlib` de auditoría. Sigue pendiente confirmar con la cátedra la
-autorización de `datetime` y de los demás módulos usados, incluidos los de pruebas;
-que sean parte de la biblioteca estándar no confirma su autorización académica.
-El alcance y las tareas restantes están en la
-[documentación de la segunda entrega](Documentacion/Documentacion_TP2.md).
+Ver el detalle en [Documentacion/Pendientes_Equipo_TP2.md](Documentacion/Pendientes_Equipo_TP2.md) y en el [plan actualizado](Documentacion/Plan_Implementacion_TP2.md):
 
-## Qué falta para entregar el 5 de noviembre
-
-| Responsable | Pendiente |
-|---|---|
-| Edney | JSON con recuperación tras reinicio, reportes con conjuntos, diccionarios de tipos/niveles y `sorted()` en ordenamientos y búsqueda binaria. |
-| Tomás | Revisión de `unicodedata`, presentación de horarios en búsquedas/ordenamientos, confirmación de baja de clases y nombres `code` en utilidades. |
-| Javier | Confirmar módulos autorizados con la cátedra y completar la documentación de JSON/conjuntos después de su integración y validación. |
-| Equipo | Prueba integral, ejecución en otro equipo, archivos de entrega y defensa. |
-
-Las pruebas y la limpieza asignadas a Lucas ya están integradas. Los diccionarios,
-tuplas, excepciones y archivos de texto ya tienen uso efectivo; JSON y conjuntos
-son los requisitos obligatorios aún ausentes. Ver el [plan actualizado](Documentacion/Plan_Implementacion_TP2.md).
+1. Reportes con conjuntos (`set`) en `src/estadisticas.py` y `src/menus.py`.
+2. Persistencia JSON (`src/persistencia.py` y `datos_gimnasio.json`) con recuperación de tuplas de horarios.
+3. Inclusión de los archivos `.txt` y `.json` de entrega (§16).
+4. Reemplazo de `unicodedata` en `src/clases.py`, confirmación `(s/n)` en baja de clases y formato de horarios/niveles en búsquedas y ordenamientos.
+5. Actualización final de la documentación tras integrar JSON y conjuntos.
