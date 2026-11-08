@@ -24,21 +24,21 @@ def buscar_posicion (filas ,condicion ):
         return posiciones [0 ]
     return -1
 
-def buscar_posicion_clase (code ):
+def buscar_posicion_clase (codigo ):
     """
     Objetivo: encontrar la posición de una clase a partir de su código.
-    Parámetros: code, código de la clase buscada.
+    Parámetros: codigo, código de la clase buscada.
     Salida: posición de la clase o -1 si no existe.
     """
-    return buscar_posicion (clases ,lambda fila :fila [CLASE_CODIGO ]==code )
+    return buscar_posicion (clases ,lambda fila :fila [CLASE_CODIGO ]==codigo )
 
-def buscar_posicion_socio (code ):
+def buscar_posicion_socio (codigo ):
     """
     Objetivo: encontrar la posición de un socio a partir de su código.
-    Parámetros: code, código del socio buscado.
+    Parámetros: codigo, código del socio buscado.
     Salida: posición del socio o -1 si no existe.
     """
-    return buscar_posicion (socios ,lambda fila :fila [SOCIO_CODIGO ]==code )
+    return buscar_posicion (socios ,lambda fila :fila [SOCIO_CODIGO ]==codigo )
 
 def buscar_posicion_usuario (nombre_usuario ):
     """
@@ -52,25 +52,25 @@ def buscar_posicion_usuario (nombre_usuario ):
             posicion =indice
     return posicion
 
-def existe_codigo_clase (code ):
+def existe_codigo_clase (codigo ):
     """
     Objetivo: determinar si existe una clase con un código específico.
-    Parámetros: code, código de la clase buscada.
+    Parámetros: codigo, código de la clase buscada.
     Salida: True si la clase existe; False en caso contrario.
     """
     for fila in clases :
-        if fila [CLASE_CODIGO ]==code :
+        if fila [CLASE_CODIGO ]==codigo :
             return True
     return False
 
-def existe_codigo_socio (code ):
+def existe_codigo_socio (codigo ):
     """
     Objetivo: determinar si existe un socio con un código específico.
-    Parámetros: code, código del socio buscado.
+    Parámetros: codigo, código del socio buscado.
     Salida: True si el socio existe; False en caso contrario.
     """
     for fila in socios :
-        if fila [SOCIO_CODIGO ]==code :
+        if fila [SOCIO_CODIGO ]==codigo :
             return True
     return False
 
@@ -86,14 +86,14 @@ def socio_esta_inscripto_en_clase (codigo_socio ,codigo_clase ):
     ))
     return len (inscripciones_previas )>0
 
-def buscar_posicion_inscripcion (code ):
+def buscar_posicion_inscripcion (codigo ):
     """
     Objetivo: encontrar la posición de una inscripción a partir de su código.
-    Parámetros: code, código de la inscripción buscada.
+    Parámetros: codigo, código de la inscripción buscada.
     Salida: posición de la inscripción o -1 si no existe.
     """
     posicion =-1
     for indice in range (len (inscripciones )):
-        if inscripciones [indice ][INSCRIPCION_CODIGO ]==code :
+        if inscripciones [indice ][INSCRIPCION_CODIGO ]==codigo :
             posicion =indice
     return posicion

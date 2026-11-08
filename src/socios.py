@@ -95,7 +95,7 @@ def eliminar_afiliados ():
     if posicion ==-1 :
         print ("Socio no encontrado.")
     else :
-        print (f"¿Seguro que desea eliminar a '{socios[posicion][SOCIO_NOMBRE]}' (teléfono: {socios[posicion][SOCIO_TELEFONO]})? (s/cantidad)")
+        print (f"¿Seguro que desea eliminar a '{socios[posicion][SOCIO_NOMBRE]}' (teléfono: {socios[posicion][SOCIO_TELEFONO]})? (s/n)")
         confirmacion =input ()
         if confirmacion .lower ()=="s":
             cupos_liberados =liberar_cupos_de_afiliado (codigo ,inscripciones ,clases )

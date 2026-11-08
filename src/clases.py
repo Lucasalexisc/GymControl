@@ -1,4 +1,3 @@
-import unicodedata
 from auditoria import registrar_auditoria
 
 from datos import (
@@ -19,10 +18,13 @@ from utilidades import buscar_posicion_clase
 from socios import eliminar_inscripciones_por_clase
 
 def normalizar_dia (dia ):
-    return "".join (
-        caracter
-        for caracter in unicodedata .normalize ("NFD",dia .strip ().casefold ())
-        if unicodedata .category (caracter )!="Mn"
+    dia_normalizado =dia .strip ().casefold ()
+    return (dia_normalizado
+        .replace ("á","a")
+        .replace ("é","e")
+        .replace ("í","i")
+        .replace ("ó","o")
+        .replace ("ú","u")
     )
 
 DIAS_SEMANA ={
@@ -121,7 +123,7 @@ def eliminar_clase ():
     if posicion ==-1 :
         print ("Clase no encontrada.")
     else :
-        confirmacion =input (f"¿Seguro que desea eliminar la clase '{clases[posicion][CLASE_NOMBRE]}'? (s/cantidad): ")
+        confirmacion =input (f"¿Seguro que desea eliminar la clase '{clases[posicion][CLASE_NOMBRE]}'? (s/n): ")
         if confirmacion .lower ()=="s":
             codigo_clase =clases [posicion ][CLASE_CODIGO ]
             inscripciones_eliminadas =eliminar_inscripciones_por_clase (codigo_clase )

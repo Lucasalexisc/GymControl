@@ -13,6 +13,7 @@ SOCIO_TIPO ,
 obtener_nombre_tipo
 )
 from validaciones import pedir_entero
+from clases import formatear_horario
 
 def buscar_clase_binaria ():
     """
@@ -68,7 +69,7 @@ def buscar_clase_binaria ():
         print ("Clase no encontrada.")
     else :
         print (f"Clase encontrada:")
-        print (f"Código: {codigos[posicion]}, Nombre: {nombres[posicion]}, Nivel: {niveles[posicion]}, Cupos disponibles: {capacidades[posicion]}, Horario: {horarios[posicion]}")
+        print (f"Código: {codigos[posicion]}, Nombre: {nombres[posicion]}, Nivel: {niveles[posicion]}, Cupos disponibles: {capacidades[posicion]}, Horario: {formatear_horario(horarios[posicion])}")
 
 def buscar_socio_secuencial ():
     """
