@@ -32,7 +32,9 @@ from estadisticas import (
 socios_por_clase ,
 matriz_inscripciones_por_nivel_clase ,
 total_asistencias_por_clase ,
-matriz_socios_por_tipo_y_clase
+matriz_socios_por_tipo_y_clase ,
+socios_sin_clases_activas ,
+disciplinas_unicas
 )
 
 # Menús de gestión
@@ -246,22 +248,26 @@ def pedir_opcion_matriz ():
     """
     Objetivo: solicitar y validar una opción del menú de cálculos estadísticos.
     Parámetros: ninguno.
-    Salida: opción elegida como número entero entre 0 y 4.
+    Salida: opción elegida como número entero entre 0 y 6.
     """
     print ("--- MENÚ DE CÁLCULOS ESTADÍSTICOS MATRICIALES ---")
     print ("Opción 1: Matriz de cantidad de afiliados por clase")
     print ("Opción 2: Matriz de cantidad de inscripciones por nivel de clase")
     print ("Opción 3: Total de asistencias por clase")
     print ("Opción 4: Matriz de cantidad de afiliados por tipo y clase")
+    print ("Opción 5: Socios sin clases activas")
+    print ("Opción 6: Disciplinas disponibles sin repetir")
     print ("Opción 0: Volver al menú principal")
     opcion_ingresada =input ("Ingrese una opción: ")
-    while not es_entero (opcion_ingresada )or int (opcion_ingresada )<0 or int (opcion_ingresada )>4 :
+    while not es_entero (opcion_ingresada )or int (opcion_ingresada )<0 or int (opcion_ingresada )>6 :
         print ("La opción ingresada es errónea, por favor ingrese una opción válida.")
         print ("--- MENÚ DE CÁLCULOS ESTADÍSTICOS MATRICIALES ---")
         print ("Opción 1: Matriz de cantidad de afiliados por clase")
         print ("Opción 2: Matriz de cantidad de inscripciones por nivel de clase")
         print ("Opción 3: Total de asistencias por clase")
         print ("Opción 4: Matriz de cantidad de afiliados por tipo y clase")
+        print ("Opción 5: Socios sin clases activas (conjuntos)")
+        print ("Opción 6: Disciplinas disponibles sin repetir (conjuntos)")
         print ("Opción 0: Volver al menú principal")
         opcion_ingresada =input ("Ingrese una opción: ")
     return int (opcion_ingresada )
@@ -282,6 +288,10 @@ def menu_matriz ():
             total_asistencias_por_clase ()
         elif opcion ==4 :
             matriz_socios_por_tipo_y_clase ()
+        elif opcion ==5 :
+            socios_sin_clases_activas ()
+        elif opcion ==6 :
+            disciplinas_unicas ()
         opcion =pedir_opcion_matriz ()
 
 def pedir_opcion_principal ():
