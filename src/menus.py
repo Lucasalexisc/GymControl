@@ -232,17 +232,19 @@ def menu_ordenamiento ():
 
 def opcion_menu_ordenamiento ():
     """
-    Objetivo: ejecutar el ordenamiento elegido por el usuario.
+    Objetivo: ejecutar el ordenamiento elegido por el usuario hasta que decida volver.
     Parámetros: ninguno.
     Salida: no devuelve valores; muestra los datos ordenados según la opción elegida.
     """
     opcion =menu_ordenamiento ()
-    if opcion ==1 :
-        ordenar_socios_por_edad ()
-    elif opcion ==2 :
-        ordenar_clases_por_nivel ()
-    elif opcion ==3 :
-        ordenar_inscripciones_por_asistencias ()
+    while opcion !=0 :
+        if opcion ==1 :
+            ordenar_socios_por_edad ()
+        elif opcion ==2 :
+            ordenar_clases_por_nivel ()
+        elif opcion ==3 :
+            ordenar_inscripciones_por_asistencias ()
+        opcion =menu_ordenamiento ()
 
 def pedir_opcion_matriz ():
     """
@@ -255,8 +257,8 @@ def pedir_opcion_matriz ():
     print ("Opción 2: Matriz de cantidad de inscripciones por nivel de clase")
     print ("Opción 3: Total de asistencias por clase")
     print ("Opción 4: Matriz de cantidad de afiliados por tipo y clase")
-    print ("Opción 5: Socios sin clases activas")
-    print ("Opción 6: Disciplinas disponibles sin repetir")
+    print ("Opción 5: Socios sin clases activas (conjuntos)")
+    print ("Opción 6: Disciplinas disponibles sin repetir (conjuntos)")
     print ("Opción 0: Volver al menú principal")
     opcion_ingresada =input ("Ingrese una opción: ")
     while not es_entero (opcion_ingresada )or int (opcion_ingresada )<0 or int (opcion_ingresada )>6 :

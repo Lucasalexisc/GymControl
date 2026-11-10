@@ -6,6 +6,7 @@ Cumple con la restricción §12.1 (sin uso de class / POO).
 
 import os
 import sys
+import tempfile
 
 ruta_src = os.path.join(os.path.dirname(__file__), "src")
 if os.path.exists(ruta_src) and ruta_src not in sys.path:
@@ -16,6 +17,9 @@ from utilidades import socio_esta_inscripto_en_clase
 from auditoria import resumir_auditoria
 from clases import es_hora_valida
 from socios import liberar_cupos_de_afiliado
+from estadisticas import obtener_socios_sin_clases_activas
+from persistencia import guardar_datos, cargar_datos
+from datos import socios, clases, inscripciones
 
 
 def mostrar_resultado_prueba(numero, categoria, funcion, datos, esperado, obtenido):
@@ -131,7 +135,7 @@ def prueba_09_limite_baja_socio_sin_inscripciones():
     )
 
 
-# --- 1 PRUEBA RELEVANTE PARA LA PROBLEMÁTICA DEL SISTEMA ---
+# --- PRUEBAS RELEVANTES PARA LA PROBLEMÁTICA E INTEGRACIÓN DEL SISTEMA ---
 
 def prueba_10_relevante_liberacion_cupos_baja_socio():
     inscripciones_prueba = [
@@ -152,6 +156,53 @@ def prueba_10_relevante_liberacion_cupos_baja_socio():
     )
 
 
+def prueba_11_conjuntos_socios_sin_clases_activas():
+    socios_prueba = [
+        ["Juan Perez", 101, 28, 1, "11-2587-8779"],
+        ["Rodriguez Pol", 103, 69, 2, "11-4678-2193"],
+        ["julio", 112, 32, 3, "11-4790-1253"],
+    ]
+    inscripciones_prueba = [
+        [301, 101, 205, 8, 1],  # Activa
+        [303, 103, 201, 10, 2],  # Inactiva
+    ]
+    obtenido = obtener_socios_sin_clases_activas(socios_prueba, inscripciones_prueba)
+    esperado = {103, 112}
+    return mostrar_resultado_prueba(
+        11, "Caso Relevante (Conjuntos)", "obtener_socios_sin_clases_activas(socios, inscripciones)",
+        "socios={101, 103, 112}, inscripciones=[101 activa, 103 inactiva]",
+        esperado, obtenido
+    )
+
+
+def prueba_12_persistencia_json_reconstruccion_tuplas():
+    respaldo_socios = [fila[:] for fila in socios]
+    respaldo_clases = [fila[:] for fila in clases]
+    respaldo_inscripciones = [fila[:] for fila in inscripciones]
+    try:
+        with tempfile.TemporaryDirectory() as carpeta:
+            ruta_temp = os.path.join(carpeta, "datos_prueba.json")
+            guardado_ok = guardar_datos(ruta_temp)
+            clases[0][3] = 99
+            cargado_ok = cargar_datos(ruta_temp)
+            horario_recuperado = clases[0][4]
+            es_tupla_anidada = (
+                isinstance(horario_recuperado, tuple)
+                and isinstance(horario_recuperado[0], tuple)
+            )
+            obtenido = (guardado_ok, cargado_ok, clases[0][3], es_tupla_anidada)
+            esperado = (True, True, respaldo_clases[0][3], True)
+            return mostrar_resultado_prueba(
+                12, "Caso Relevante (JSON + Tuplas)", "guardar_datos(ruta) / cargar_datos(ruta)",
+                "guardado en JSON temporal, mutación en memoria y recuperación de tuplas",
+                esperado, obtenido
+            )
+    finally:
+        socios[:] = respaldo_socios
+        clases[:] = respaldo_clases
+        inscripciones[:] = respaldo_inscripciones
+
+
 def ejecutar_pruebas():
     print("=" * 75)
     print("EJECUCIÓN DE PRUEBAS UNITARIAS - GYMCONTROL")
@@ -167,6 +218,8 @@ def ejecutar_pruebas():
         prueba_08_limite_horarios_bordes,
         prueba_09_limite_baja_socio_sin_inscripciones,
         prueba_10_relevante_liberacion_cupos_baja_socio,
+        prueba_11_conjuntos_socios_sin_clases_activas,
+        prueba_12_persistencia_json_reconstruccion_tuplas,
     ]
     aprobadas = 0
     for prueba in pruebas:

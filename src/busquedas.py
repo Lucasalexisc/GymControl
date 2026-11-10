@@ -10,9 +10,11 @@ SOCIO_CODIGO ,
 SOCIO_NOMBRE ,
 SOCIO_EDAD ,
 SOCIO_TIPO ,
-obtener_nombre_tipo
+obtener_nombre_tipo ,
+obtener_nombre_nivel
 )
 from validaciones import pedir_entero
+from clases import formatear_horario
 
 def buscar_clase_binaria ():
     """
@@ -45,7 +47,7 @@ def buscar_clase_binaria ():
     else :
         print (f"Clase encontrada:")
         fila = clases_ordenadas[posicion]
-        print (f"Código: {fila[CLASE_CODIGO]}, Nombre: {fila[CLASE_NOMBRE]}, Nivel: {fila[CLASE_NIVEL]}, Cupos disponibles: {fila[CLASE_CUPOS]}, Horario: {fila[CLASE_HORARIO]}")
+        print (f"Código: {fila[CLASE_CODIGO]}, Nombre: {fila[CLASE_NOMBRE]}, Nivel: {obtener_nombre_nivel(fila[CLASE_NIVEL])}, Cupos disponibles: {fila[CLASE_CUPOS]}, Horario: {formatear_horario(fila[CLASE_HORARIO])}")
 
 def buscar_socio_secuencial ():
     """
