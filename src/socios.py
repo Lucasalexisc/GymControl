@@ -1,4 +1,5 @@
 from auditoria import registrar_auditoria
+from persistencia import guardar_datos
 from datos import (
 socios ,
 inscripciones ,
@@ -18,37 +19,10 @@ obtener_nombre_tipo
 from validaciones import (
 es_entero ,
 pedir_entero ,
-es_telefono_valido
+es_telefono_valido ,
+es_nombre_clase_valido
 )
 from utilidades import buscar_posicion_socio ,buscar_posicion
-
-# Gestión de socios ==> Este codigo habria que eliminarlo ya que no lo llaman en ninguna parte LC 2/9
-def pedir_opcion ():
-    """
-    Objetivo: solicitar y validar una opción del menú de gestión de socios.
-    Parámetros: ninguno.
-    Salida: opción elegida como número entero entre 0 y 4.
-    """
-    print ("Opcion 1: sumar afiliado")
-    print ("Opcion 2: eliminar afiliado")
-    print ("Opcion 3: modificar afiliado")
-    print ("Opcion 4: listar afiliados")
-    print ("Opcion 0: salir")
-
-    opcion =pedir_entero ("Ingrese una opcion: ","El dato ingresado es erroneo, por favor ingrese una opcion valida.",0 ,4 )
-
-    while opcion <0 or opcion >4 :
-        print ("El dato ingresado es erroneo, por favor ingrese una opcion valida.")
-
-        print ("Opcion 1: sumar afiliado")
-        print ("Opcion 2: eliminar afiliado")
-        print ("Opcion 3: modificar afiliado")
-        print ("Opcion 4: listar afiliados")
-        print ("Opcion 0: salir")
-
-        opcion =pedir_entero ("Ingrese una opcion: ","El dato ingresado es erroneo, por favor ingrese una opcion valida.",0 ,4 )
-
-    return opcion
 
 def sumar_afiliados ():
     """
@@ -57,22 +31,18 @@ def sumar_afiliados ():
     Salida: no devuelve valores; agrega el socio a la matriz de afiliados.
     """
     print ("SUMAR AFILIADO")
-    nombre =input ("Nombre completo: ")
+    nombre =input ("Nombre completo: ").strip ()
+    while not nombre or not es_nombre_clase_valido (nombre ):
+        print ("ERROR, ingrese un nombre válido formado únicamente por letras y espacios.")
+        nombre =input ("Nombre completo: ").strip ()
 
-    edad =input ("Ingrese su edad: ")
-    while not es_entero (edad )or int (edad )<0 or int (edad )>100 :
-        print ("ERROR, se debe ingresar una edad entre 0 y 100")
-        edad =input ("Vuelva a ingresar su edad: ")
+    edad =pedir_entero ("Ingrese su edad: ","ERROR, se debe ingresar una edad entre 0 y 100",0 ,100 )
+    tipo_socio =pedir_entero ("Ingrese su tipo (1-Mensual, 2-Libre, 3-Premium): ","ERROR, se debe ingresar un codigo entre 1 y 3",1 ,3 )
 
-    tipo_socio =input ("Ingrese su tipo (1-Mensual, 2-Libre, 3-Premium): ")
-    while not es_entero (tipo_socio )or int (tipo_socio )<1 or int (tipo_socio )>3 :
-        print ("ERROR, se debe ingresar un codigo entre 1 y 3")
-        tipo_socio =input ("Vuelva a ingresar su tipo (1-Mensual, 2-Libre, 3-Premium): ")
-
-    telefono =input ("Ingrese el teléfono (formato XX-XXXX-XXXX): ")
+    telefono =input ("Ingrese el teléfono (formato XX-XXXX-XXXX): ").strip ()
     while not es_telefono_valido (telefono ):
         print ("ERROR, el teléfono debe tener el formato XX-XXXX-XXXX")
-        telefono =input ("Vuelva a ingresar el teléfono: ")
+        telefono =input ("Vuelva a ingresar el teléfono: ").strip ()
 
     codigo =101
     if len (socios )>0 :
@@ -80,6 +50,7 @@ def sumar_afiliados ():
 
     socios .append ([nombre ,codigo ,int (edad ),int (tipo_socio ),telefono ])
 
+    guardar_datos ()
     registrar_auditoria("ALTA_SOCIO", f"Código={codigo}")
     print (f"Socio '{nombre}' agregado con código {codigo}.")
 
@@ -101,6 +72,7 @@ def eliminar_afiliados ():
             cupos_liberados =liberar_cupos_de_afiliado (codigo ,inscripciones ,clases )
             inscripciones_eliminadas =eliminar_inscripciones_por_socio (codigo )
             socios .pop (posicion )
+            guardar_datos ()
             registrar_auditoria("BAJA_SOCIO", f"Código={codigo}; inscripciones eliminadas={inscripciones_eliminadas}")
             print ("Socio eliminado.")
             if inscripciones_eliminadas >0 :
@@ -186,8 +158,8 @@ def modificar_socio ():
 
             if opcion ==1 :
                 nombre =input ("Nuevo nombre: ").strip ()
-                while not nombre :
-                    print ("ERROR, el nombre no puede estar vacío.")
+                while not nombre or not es_nombre_clase_valido (nombre ):
+                    print ("ERROR, el nombre no puede estar vacío y debe contener solo letras.")
                     nombre =input ("Nuevo nombre: ").strip ()
                 socios [posicion ][SOCIO_NOMBRE ]=nombre
             elif opcion ==2 :
@@ -207,6 +179,7 @@ def modificar_socio ():
             if opcion !=0 :
                 print ("Atributo modificado correctamente.")
         if socio_anterior !=socios [posicion ]:
+            guardar_datos ()
             registrar_auditoria("MODIFICACION_SOCIO", f"Código={codigo}")
 
 def listar_socios ():

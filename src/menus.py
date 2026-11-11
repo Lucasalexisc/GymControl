@@ -32,7 +32,9 @@ from estadisticas import (
 socios_por_clase ,
 matriz_inscripciones_por_nivel_clase ,
 total_asistencias_por_clase ,
-matriz_socios_por_tipo_y_clase
+matriz_socios_por_tipo_y_clase ,
+socios_sin_clases_activas ,
+disciplinas_unicas
 )
 
 # Menús de gestión
@@ -179,15 +181,15 @@ def menu_busqueda ():
     Salida: opción elegida como número entero entre 0 y 2.
     """
     print ("--- MENÚ DE BÚSQUEDA ---")
-    print ("Opción 1: Buscar clase por código (Binaria)")
-    print ("Opción 2: Buscar socio por código (Secuencial)")
+    print ("Opción 1: Buscar clase por código ")
+    print ("Opción 2: Buscar socio por código ")
     print ("Opción 0: Volver al menú principal")
     opcion_ingresada =input ("Ingrese una opción: ")
     while not es_entero (opcion_ingresada )or int (opcion_ingresada )<0 or int (opcion_ingresada )>2 :
         print ("La opción ingresada es errónea, por favor ingrese una opción válida.")
         print ("--- MENÚ DE BÚSQUEDA ---")
-        print ("Opción 1: Buscar clase por código (Binaria)")
-        print ("Opción 2: Buscar socio por código (Secuencial)")
+        print ("Opción 1: Buscar clase por código ")
+        print ("Opción 2: Buscar socio por código ")
         print ("Opción 0: Volver al menú principal")
         opcion_ingresada =input ("Ingrese una opción: ")
     return int (opcion_ingresada )
@@ -213,55 +215,61 @@ def menu_ordenamiento ():
     Salida: opción elegida como número entero entre 0 y 3.
     """
     print ("--- MENÚ DE ORDENAMIENTO ---")
-    print ("Opción 1: Ordenar socios por edad (Selección)")
-    print ("Opción 2: Ordenar clases por nivel (Inserción)")
-    print ("Opción 3: Ordenar inscripciones por asistencias (Burbujeo)")
+    print ("Opción 1: Ordenar socios por edad ")
+    print ("Opción 2: Ordenar clases por nivel ")
+    print ("Opción 3: Ordenar inscripciones por asistencias ")
     print ("Opción 0: Volver al menú principal")
     opcion_ingresada =input ("Ingrese una opción: ")
     while not es_entero (opcion_ingresada )or int (opcion_ingresada )<0 or int (opcion_ingresada )>3 :
         print ("La opción ingresada es errónea, por favor ingrese una opción válida.")
         print ("--- MENÚ DE ORDENAMIENTO ---")
-        print ("Opción 1: Ordenar socios por edad (Selección)")
-        print ("Opción 2: Ordenar clases por nivel (Inserción)")
-        print ("Opción 3: Ordenar inscripciones por asistencias (Burbujeo)")
+        print ("Opción 1: Ordenar socios por edad ")
+        print ("Opción 2: Ordenar clases por nivel")
+        print ("Opción 3: Ordenar inscripciones por asistencias ")
         print ("Opción 0: Volver al menú principal")
         opcion_ingresada =input ("Ingrese una opción: ")
     return int (opcion_ingresada )
 
 def opcion_menu_ordenamiento ():
     """
-    Objetivo: ejecutar el ordenamiento elegido por el usuario.
+    Objetivo: ejecutar el ordenamiento elegido por el usuario hasta que decida volver.
     Parámetros: ninguno.
     Salida: no devuelve valores; muestra los datos ordenados según la opción elegida.
     """
     opcion =menu_ordenamiento ()
-    if opcion ==1 :
-        ordenar_socios_por_edad ()
-    elif opcion ==2 :
-        ordenar_clases_por_nivel ()
-    elif opcion ==3 :
-        ordenar_inscripciones_por_asistencias ()
+    while opcion !=0 :
+        if opcion ==1 :
+            ordenar_socios_por_edad ()
+        elif opcion ==2 :
+            ordenar_clases_por_nivel ()
+        elif opcion ==3 :
+            ordenar_inscripciones_por_asistencias ()
+        opcion =menu_ordenamiento ()
 
 def pedir_opcion_matriz ():
     """
     Objetivo: solicitar y validar una opción del menú de cálculos estadísticos.
     Parámetros: ninguno.
-    Salida: opción elegida como número entero entre 0 y 4.
+    Salida: opción elegida como número entero entre 0 y 6.
     """
     print ("--- MENÚ DE CÁLCULOS ESTADÍSTICOS MATRICIALES ---")
     print ("Opción 1: Matriz de cantidad de afiliados por clase")
     print ("Opción 2: Matriz de cantidad de inscripciones por nivel de clase")
     print ("Opción 3: Total de asistencias por clase")
     print ("Opción 4: Matriz de cantidad de afiliados por tipo y clase")
+    print ("Opción 5: Socios sin clases activas (conjuntos)")
+    print ("Opción 6: Disciplinas disponibles sin repetir (conjuntos)")
     print ("Opción 0: Volver al menú principal")
     opcion_ingresada =input ("Ingrese una opción: ")
-    while not es_entero (opcion_ingresada )or int (opcion_ingresada )<0 or int (opcion_ingresada )>4 :
+    while not es_entero (opcion_ingresada )or int (opcion_ingresada )<0 or int (opcion_ingresada )>6 :
         print ("La opción ingresada es errónea, por favor ingrese una opción válida.")
         print ("--- MENÚ DE CÁLCULOS ESTADÍSTICOS MATRICIALES ---")
         print ("Opción 1: Matriz de cantidad de afiliados por clase")
         print ("Opción 2: Matriz de cantidad de inscripciones por nivel de clase")
         print ("Opción 3: Total de asistencias por clase")
         print ("Opción 4: Matriz de cantidad de afiliados por tipo y clase")
+        print ("Opción 5: Socios sin clases activas (conjuntos)")
+        print ("Opción 6: Disciplinas disponibles sin repetir (conjuntos)")
         print ("Opción 0: Volver al menú principal")
         opcion_ingresada =input ("Ingrese una opción: ")
     return int (opcion_ingresada )
@@ -282,6 +290,10 @@ def menu_matriz ():
             total_asistencias_por_clase ()
         elif opcion ==4 :
             matriz_socios_por_tipo_y_clase ()
+        elif opcion ==5 :
+            socios_sin_clases_activas ()
+        elif opcion ==6 :
+            disciplinas_unicas ()
         opcion =pedir_opcion_matriz ()
 
 def pedir_opcion_principal ():

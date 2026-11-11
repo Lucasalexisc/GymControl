@@ -1,4 +1,5 @@
 from auditoria import registrar_auditoria
+from persistencia import guardar_datos
 
 from datos import (
 clases ,
@@ -19,7 +20,8 @@ from socios import eliminar_inscripciones_por_clase
 
 def normalizar_dia (dia ):
     dia_normalizado =dia .strip ().casefold ()
-    return (dia_normalizado
+    return (
+        dia_normalizado
         .replace ("á","a")
         .replace ("é","e")
         .replace ("í","i")
@@ -88,23 +90,14 @@ def sumar_clase ():
         print ("ERROR, ingrese una o más palabras formadas solamente por letras")
         nombre =input ("Nombre de la clase: ").strip ()
 
-    nivel =input ("Nivel (1-Principiante, 2-Intermedio, 3-Avanzado): ")
-    while not es_entero (nivel )or int (nivel )<1 or int (nivel )>3 :
-        print ("ERROR, ingresar nivel entre 1 y 3")
-        nivel =input ("Nivel (1-Principiante, 2-Intermedio, 3-Avanzado): ")
-    nivel =int (nivel )
-
-    capacidad =input ("Cupos disponibles: ")
-    while not es_entero (capacidad )or int (capacidad )<1 :
-        print ("ERROR, ingresar un número mayor a 0")
-        capacidad =input ("Cupos disponibles: ")
-    capacidad =int (capacidad )
-
+    nivel =pedir_entero ("Nivel (1-Principiante, 2-Intermedio, 3-Avanzado): ","ERROR, ingresar nivel entre 1 y 3",1 ,3 )
+    capacidad =pedir_entero ("Cupos disponibles: ","ERROR, ingresar un número mayor a 0",1 )
     horario =pedir_horario ()
 
     codigo =201 if len (clases )==0 else clases [-1 ][CLASE_CODIGO ]+1
     clases .append ([codigo ,nombre ,nivel ,capacidad ,horario ])
 
+    guardar_datos ()
     registrar_auditoria("ALTA_CLASE", f"Código={codigo}")
     print (f"Clase '{nombre}' agregada con código {codigo}.")
 
@@ -128,6 +121,7 @@ def eliminar_clase ():
             codigo_clase =clases [posicion ][CLASE_CODIGO ]
             inscripciones_eliminadas =eliminar_inscripciones_por_clase (codigo_clase )
             clases .pop (posicion )
+            guardar_datos ()
             registrar_auditoria("BAJA_CLASE", f"Código={codigo_clase}; inscripciones eliminadas={inscripciones_eliminadas}")
             print ("Clase eliminada.")
             if inscripciones_eliminadas >0 :
@@ -179,6 +173,7 @@ def modificar_clase ():
             if opcion !=0 :
                 print ("Atributo modificado correctamente.")
         if clase_anterior !=clases [posicion ]:
+            guardar_datos ()
             registrar_auditoria("MODIFICACION_CLASE", f"Código={codigo}")
 
 def listar_clases ():

@@ -10,7 +10,8 @@ SOCIO_CODIGO ,
 SOCIO_NOMBRE ,
 SOCIO_EDAD ,
 SOCIO_TIPO ,
-obtener_nombre_tipo
+obtener_nombre_tipo ,
+obtener_nombre_nivel
 )
 from validaciones import pedir_entero
 from clases import formatear_horario
@@ -24,32 +25,8 @@ def buscar_clase_binaria ():
     print ("BÚSQUEDA BINARIA DE CLASE POR CÓDIGO")
     codigo =pedir_entero ("Ingrese el código de la clase a buscar: ","Código inválido, ingrese un número.")
 
-    codigos =[fila [CLASE_CODIGO ]for fila in clases ]
-    nombres =[fila [CLASE_NOMBRE ]for fila in clases ]
-    niveles =[fila [CLASE_NIVEL ]for fila in clases ]
-    capacidades =[fila [CLASE_CUPOS ]for fila in clases ]
-    horarios =[fila [CLASE_HORARIO ]for fila in clases ]
-
-    cantidad =len (codigos )
-    for indice in range (1 ,cantidad ):
-        clave_codigo =codigos [indice ]
-        clave_nombre =nombres [indice ]
-        clave_nivel =niveles [indice ]
-        clave_capacidad =capacidades [indice ]
-        clave_horario =horarios [indice ]
-        indice_comparacion =indice -1
-        while indice_comparacion >=0 and codigos [indice_comparacion ]>clave_codigo :
-            codigos [indice_comparacion +1 ]=codigos [indice_comparacion ]
-            nombres [indice_comparacion +1 ]=nombres [indice_comparacion ]
-            niveles [indice_comparacion +1 ]=niveles [indice_comparacion ]
-            capacidades [indice_comparacion +1 ]=capacidades [indice_comparacion ]
-            horarios [indice_comparacion +1 ]=horarios [indice_comparacion ]
-            indice_comparacion -=1
-        codigos [indice_comparacion +1 ]=clave_codigo
-        nombres [indice_comparacion +1 ]=clave_nombre
-        niveles [indice_comparacion +1 ]=clave_nivel
-        capacidades [indice_comparacion +1 ]=clave_capacidad
-        horarios [indice_comparacion +1 ]=clave_horario
+    clases_ordenadas = sorted(clases, key=lambda fila: fila[CLASE_CODIGO])
+    cantidad = len(clases_ordenadas)
 
     inicio =0
     fin =cantidad -1
@@ -57,10 +34,10 @@ def buscar_clase_binaria ():
 
     while inicio <=fin :
         medio =(inicio +fin )//2
-        if codigos [medio ]==codigo :
+        if clases_ordenadas [medio ][CLASE_CODIGO ]==codigo :
             posicion =medio
             inicio =fin +1
-        elif codigos [medio ]<codigo :
+        elif clases_ordenadas [medio ][CLASE_CODIGO ]<codigo :
             inicio =medio +1
         else :
             fin =medio -1
@@ -69,7 +46,8 @@ def buscar_clase_binaria ():
         print ("Clase no encontrada.")
     else :
         print (f"Clase encontrada:")
-        print (f"Código: {codigos[posicion]}, Nombre: {nombres[posicion]}, Nivel: {niveles[posicion]}, Cupos disponibles: {capacidades[posicion]}, Horario: {formatear_horario(horarios[posicion])}")
+        fila = clases_ordenadas[posicion]
+        print (f"Código: {fila[CLASE_CODIGO]}, Nombre: {fila[CLASE_NOMBRE]}, Nivel: {obtener_nombre_nivel(fila[CLASE_NIVEL])}, Cupos disponibles: {fila[CLASE_CUPOS]}, Horario: {formatear_horario(fila[CLASE_HORARIO])}")
 
 def buscar_socio_secuencial ():
     """
