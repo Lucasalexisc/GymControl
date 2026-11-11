@@ -60,20 +60,17 @@ inscripciones =[
 [311 ,111 ,201 ,9 ,1 ]
 ]
 
+# Diccionarios de códigos -> nombres
+NIVELES_CLASE = {1: "Principiante", 2: "Intermedio", 3: "Avanzado"}
+TIPOS_SOCIO = {1: "Mensual", 2: "Libre", 3: "Premium"}
+
 def obtener_nombre_nivel (codigo_nivel ):
     """
     Objetivo: obtener el nombre correspondiente a un código de nivel de clase.
     Parámetros: codigo_nivel, código numérico del nivel.
     Salida: nombre del nivel o "Desconocido" si el código no es válido.
     """
-    if codigo_nivel ==1 :
-        return "Principiante"
-    elif codigo_nivel ==2 :
-        return "Intermedio"
-    elif codigo_nivel ==3 :
-        return "Avanzado"
-    else :
-        return "Desconocido"
+    return NIVELES_CLASE.get(codigo_nivel, "Desconocido")
 
 def obtener_nombre_tipo (codigo_tipo ):
     """
@@ -81,11 +78,4 @@ def obtener_nombre_tipo (codigo_tipo ):
     Parámetros: codigo_tipo, código numérico del tipo de socio.
     Salida: nombre del tipo o "Desconocido" si el código no es válido.
     """
-    if codigo_tipo ==1 :
-        return "Mensual"
-    elif codigo_tipo ==2 :
-        return "Libre"
-    elif codigo_tipo ==3 :
-        return "Premium"
-    else :
-        return "Desconocido"
+    return TIPOS_SOCIO.get(codigo_tipo, "Desconocido")

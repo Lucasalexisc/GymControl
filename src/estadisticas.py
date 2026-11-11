@@ -7,6 +7,9 @@ INSCRIPCION_CODIGO_SOCIO ,
 INSCRIPCION_CODIGO_CLASE ,
 INSCRIPCION_ASISTENCIAS ,
 INSCRIPCION_CODIGO ,
+INSCRIPCION_ESTADO ,
+SOCIO_CODIGO ,
+SOCIO_NOMBRE ,
 CLASE_NOMBRE ,
 CLASE_NIVEL ,
 SOCIO_TIPO ,
@@ -110,3 +113,33 @@ def matriz_socios_por_tipo_y_clase ():
     for indice in range (len (matriz )):
         for indice_comparacion in range (len (matriz [indice ])):
             print (f"Socio {obtener_nombre_tipo(indice + 1)} - Clase {clases[indice_comparacion][CLASE_NOMBRE]}: {len(matriz[indice][indice_comparacion])} afiliados")
+
+def socios_sin_clases_activas ():
+    """
+    Objetivo: mostrar los socios que no tienen ninguna inscripción activa, usando diferencia de conjuntos.
+    Parámetros: ninguno.
+    Salida: no devuelve valores; muestra por pantalla los socios sin clases activas.
+    """
+    print ("SOCIOS SIN CLASES ACTIVAS")
+    codigos_todos ={fila [SOCIO_CODIGO ]for fila in socios }
+    codigos_activos ={fila [INSCRIPCION_CODIGO_SOCIO ]for fila in inscripciones if fila [INSCRIPCION_ESTADO ]==1 }
+    codigos_sin_clases =codigos_todos -codigos_activos
+    if len (codigos_sin_clases )==0 :
+        print ("Todos los socios tienen al menos una clase activa.")
+    else :
+        for codigo in sorted (codigos_sin_clases ):
+            posicion =buscar_posicion_socio (codigo )
+            print (f"Código: {codigo}, Nombre: {socios[posicion][SOCIO_NOMBRE]}")
+        print (f"Total: {len(codigos_sin_clases)} socios")
+
+def disciplinas_unicas ():
+    """
+    Objetivo: mostrar los nombres de las disciplinas disponibles sin repetidos, usando un conjunto.
+    Parámetros: ninguno.
+    Salida: no devuelve valores; muestra por pantalla las disciplinas únicas.
+    """
+    print ("DISCIPLINAS DISPONIBLES")
+    disciplinas ={fila [CLASE_NOMBRE ].strip ().lower ()for fila in clases }
+    for disciplina in sorted (disciplinas ):
+        print (f"- {disciplina.capitalize()}")
+    print (f"Total: {len(disciplinas)} disciplinas distintas")

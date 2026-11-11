@@ -99,11 +99,11 @@ def listar_clases_socio ():
     if posicion ==-1 :
         print ("Error,socio no encontrado")
         return
-    clases =clases_de_socio (codigo )
-    if not clases :
+    nombres_clases =clases_de_socio (codigo )
+    if not nombres_clases :
         print ("El socio no tiene clases activas")
     else :
-        print (f"El socio {socios[posicion][SOCIO_NOMBRE]} tiene las clases: {', '.join(clases)}")
+        print (f"El socio {socios[posicion][SOCIO_NOMBRE]} tiene las clases: {', '.join(nombres_clases)}")
 
 def baja_inscripcion ():
     """
