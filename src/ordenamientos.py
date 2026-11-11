@@ -16,8 +16,10 @@ INSCRIPCION_CODIGO ,
 INSCRIPCION_CODIGO_SOCIO ,
 INSCRIPCION_CODIGO_CLASE ,
 INSCRIPCION_ESTADO ,
-obtener_nombre_tipo
+obtener_nombre_tipo ,
+obtener_nombre_nivel
 )
+from clases import formatear_horario
 
 def ordenar_socios_por_edad ():
     """
@@ -41,7 +43,7 @@ def ordenar_clases_por_nivel ():
 
     print ("CLASES ORDENADAS POR NIVEL")
     for fila in clases_ordenadas :
-        print (f"Código: {fila[CLASE_CODIGO]}, Nombre: {fila[CLASE_NOMBRE]}, Nivel: {fila[CLASE_NIVEL]}, Cupos disponibles: {fila[CLASE_CUPOS]}, Horario: {fila[CLASE_HORARIO]}")
+        print (f"Código: {fila[CLASE_CODIGO]}, Nombre: {fila[CLASE_NOMBRE]}, Nivel: {obtener_nombre_nivel(fila[CLASE_NIVEL])}, Cupos disponibles: {fila[CLASE_CUPOS]}, Horario: {formatear_horario(fila[CLASE_HORARIO])}")
 
 def ordenar_inscripciones_por_asistencias ():
     """

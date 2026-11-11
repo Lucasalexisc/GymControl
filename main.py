@@ -7,15 +7,18 @@ import os
 import sys
 
 # Agrega la carpeta 'src' al path de Python para importar los módulos limpios
-ruta_src =os .path .join (os .path .dirname (__file__ ),"src")
-if os .path .exists (ruta_src )and ruta_src not in sys .path :
-    sys .path .insert (0 ,ruta_src )
+ruta_src = os.path.join(os.path.dirname(__file__), "src")
+if os.path.exists(ruta_src) and ruta_src not in sys.path:
+    sys.path.insert(0, ruta_src)
 
 from login import iniciar_sesion
 from menus import menu_principal
 from auditoria import cerrar_sesion
+from persistencia import cargar_datos
+
 
 def ejecutar():
+    cargar_datos()
     try:
         if iniciar_sesion():
             menu_principal()

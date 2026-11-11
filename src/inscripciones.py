@@ -1,4 +1,5 @@
 from auditoria import registrar_auditoria
+from persistencia import guardar_datos
 from datos import (
 inscripciones ,
 clases ,
@@ -52,6 +53,7 @@ def alta_inscripcion ():
     codigo =301 if len (inscripciones )==0 else inscripciones [-1 ][INSCRIPCION_CODIGO ]+1
     inscripciones .append ([codigo ,int (codigo_socio ),int (codigo_clase ),0 ,1 ])
     clases [posicion_clase ][CLASE_CUPOS ]-=1
+    guardar_datos ()
     registrar_auditoria("ALTA_INSCRIPCION", f"Código={codigo}; socio={codigo_socio}; clase={codigo_clase}")
     print ("Inscripción realizada con éxito.")
 
@@ -128,6 +130,7 @@ def baja_inscripcion ():
             inscripciones [posicion ][INSCRIPCION_ESTADO ]=2
             if posicion_clase !=-1 :
                 clases [posicion_clase ][CLASE_CUPOS ]+=1
+            guardar_datos ()
             registrar_auditoria("BAJA_INSCRIPCION", f"Código={codigo}; finalizada")
             print ("Inscripción dada de baja.")
         else :
@@ -187,6 +190,7 @@ def modificar_inscripcion ():
         clases [posicion_clase ][CLASE_CUPOS ]-=1
 
     if inscripcion_anterior !=inscripciones [posicion ]:
+        guardar_datos ()
         registrar_auditoria("MODIFICACION_INSCRIPCION", f"Código={codigo}")
         print (f"Inscripción modificada: Socio '{nombre_socio}', Clase '{nombre_clase}', Asistencias: {nuevas_asistencias}, Estado: {'Activa' if nuevo_estado == 1 else 'Inactiva'}")
     else :
