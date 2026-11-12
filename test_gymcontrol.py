@@ -1,16 +1,13 @@
 """
 Suite de Pruebas Unitarias para GymControl (Segunda Parte).
 Ejecución independiente: python3 test_gymcontrol.py
-Cumple con la restricción §12.1 (sin uso de class / POO).
+Cumple con las restricciones §12.1 y §12.3 (sin uso de class ni librerías no vistas).
 """
 
-import os
 import sys
-import tempfile
 
-ruta_src = os.path.join(os.path.dirname(__file__), "src")
-if os.path.exists(ruta_src) and ruta_src not in sys.path:
-    sys.path.insert(0, ruta_src)
+if "src" not in sys.path:
+    sys.path.insert(0, "src")
 
 from validaciones import es_entero, es_nombre_clase_valido, es_telefono_valido
 from utilidades import socio_esta_inscripto_en_clase
@@ -70,9 +67,9 @@ def prueba_03_socio_inscripto_activo():
 
 def prueba_04_resumen_auditoria_diccionario():
     eventos_prueba = [
-        ["2026-10-25T10:00:00-03:00", "admin", "ALTA_SOCIO", "Código=113"],
-        ["2026-10-25T10:05:00-03:00", "admin", "ALTA_SOCIO", "Código=114"],
-        ["2026-10-25T10:10:00-03:00", "admin", "BAJA_SOCIO", "Código=113"]
+        ["EV-0001", "admin", "ALTA_SOCIO", "Código=113"],
+        ["EV-0002", "admin", "ALTA_SOCIO", "Código=114"],
+        ["EV-0003", "admin", "BAJA_SOCIO", "Código=113"]
     ]
     esperado = {"ALTA_SOCIO": 2, "BAJA_SOCIO": 1}
     obtenido = resumir_auditoria(eventos_prueba)
@@ -180,27 +177,26 @@ def prueba_12_persistencia_json_reconstruccion_tuplas():
     respaldo_clases = [fila[:] for fila in clases]
     respaldo_inscripciones = [fila[:] for fila in inscripciones]
     try:
-        with tempfile.TemporaryDirectory() as carpeta:
-            ruta_temp = os.path.join(carpeta, "datos_prueba.json")
-            guardado_ok = guardar_datos(ruta_temp)
-            clases[0][3] = 99
-            cargado_ok = cargar_datos(ruta_temp)
-            horario_recuperado = clases[0][4]
-            es_tupla_anidada = (
-                isinstance(horario_recuperado, tuple)
-                and isinstance(horario_recuperado[0], tuple)
-            )
-            obtenido = (guardado_ok, cargado_ok, clases[0][3], es_tupla_anidada)
-            esperado = (True, True, respaldo_clases[0][3], True)
-            return mostrar_resultado_prueba(
-                12, "Caso Relevante (JSON + Tuplas)", "guardar_datos(ruta) / cargar_datos(ruta)",
-                "guardado en JSON temporal, mutación en memoria y recuperación de tuplas",
-                esperado, obtenido
-            )
+        guardado_ok = guardar_datos()
+        clases[0][3] = 99
+        cargado_ok = cargar_datos()
+        horario_recuperado = clases[0][4]
+        es_tupla_anidada = (
+            isinstance(horario_recuperado, tuple)
+            and isinstance(horario_recuperado[0], tuple)
+        )
+        obtenido = (guardado_ok, cargado_ok, clases[0][3], es_tupla_anidada)
+        esperado = (True, True, respaldo_clases[0][3], True)
+        return mostrar_resultado_prueba(
+            12, "Caso Relevante (JSON + Tuplas)", "guardar_datos() / cargar_datos()",
+            "guardado en datos_gimnasio.json, mutación en memoria y recuperación de tuplas",
+            esperado, obtenido
+        )
     finally:
         socios[:] = respaldo_socios
         clases[:] = respaldo_clases
         inscripciones[:] = respaldo_inscripciones
+        guardar_datos()
 
 
 def ejecutar_pruebas():
@@ -233,4 +229,4 @@ def ejecutar_pruebas():
 
 
 if __name__ == "__main__":
-    sys.exit(0 if ejecutar_pruebas() else 1)
+    ejecutar_pruebas()

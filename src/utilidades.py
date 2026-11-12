@@ -1,4 +1,3 @@
-import re
 from datos import (
 clases ,
 socios ,

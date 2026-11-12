@@ -1,6 +1,6 @@
-2026-11-05T10:00:00-03:00 | admin | ACCESO_EXITOSO | contraseña
-2026-11-05T10:02:15-03:00 | admin | ALTA_SOCIO | Código=113
-2026-11-05T10:04:30-03:00 | admin | ALTA_INSCRIPCION | Código=312; socio=113; clase=201
-2026-11-05T10:06:10-03:00 | admin | MODIFICACION_INSCRIPCION | Código=312
-2026-11-05T10:08:45-03:00 | admin | BAJA_SOCIO | Código=113; inscripciones eliminadas=1
-2026-11-05T10:10:00-03:00 | admin | CIERRE_SESION | Fin de sesión
+EV-0001 | admin | ACCESO_EXITOSO | contraseña
+EV-0002 | admin | ALTA_SOCIO | Código=113
+EV-0003 | admin | ALTA_INSCRIPCION | Código=312; socio=113; clase=201
+EV-0004 | admin | MODIFICACION_INSCRIPCION | Código=312
+EV-0005 | admin | BAJA_SOCIO | Código=113; inscripciones eliminadas=1
+EV-0006 | admin | CIERRE_SESION | Fin de sesión
