@@ -1,6 +1,5 @@
 """Persistencia de socios, clases e inscripciones en archivo JSON UTF-8."""
 import json
-import os
 
 from datos import (
     socios,
@@ -9,10 +8,7 @@ from datos import (
     CLASE_HORARIO,
 )
 
-RUTA_DATOS_JSON = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
-    "datos_gimnasio.json",
-)
+RUTA_DATOS_JSON = "datos_gimnasio.json"
 
 
 def reconstruir_horario(horario):
@@ -22,8 +18,11 @@ def reconstruir_horario(horario):
     dias, hora_inicio, hora_fin = horario
     if not isinstance(dias, (list, tuple)) or len(dias) == 0:
         raise ValueError("Lista de días inválida.")
+    dias_texto = []
+    for dia in dias:
+        dias_texto.append(str(dia))
     return (
-        tuple(str(dia) for dia in dias),
+        tuple(dias_texto),
         str(hora_inicio),
         str(hora_fin),
     )
@@ -82,9 +81,17 @@ def cargar_datos(ruta=None):
             fila_copia[CLASE_HORARIO] = reconstruir_horario(fila_copia[CLASE_HORARIO])
             clases_reconstruidas.append(fila_copia)
 
-        socios[:] = [ list(fila) for fila in socios_cargados ]
+        nuevos_socios = []
+        for fila in socios_cargados:
+            nuevos_socios.append(list(fila))
+
+        nuevas_inscripciones = []
+        for fila in inscripciones_cargadas:
+            nuevas_inscripciones.append(list(fila))
+
+        socios[:] = nuevos_socios
         clases[:] = clases_reconstruidas
-        inscripciones[:] = [ list(fila) for fila in inscripciones_cargadas ]
+        inscripciones[:] = nuevas_inscripciones
         return True
     except FileNotFoundError:
         return guardar_datos(origen)

@@ -1,8 +1,16 @@
+---
+title: "Documentacion_TP2.md"
+source: "C:\Users\lucas\OneDrive\Escritorio\UADE\2026\Segundo cuatrimestre\1. Algoritmos\Segundo Parcial\GymControl\Documentacion\Documentacion_TP2.md"
+type: "Archivo (.md)"
+converted_at: "2026-11-11 22:16:34"
+estimated_tokens: 2473
+---
+
 # GymControl — Documentación de la segunda entrega
 
 **Materia:** Algoritmos y Estructura de Datos 1 / Programación 1 — UADE.
-**Fecha de revisión:** 10 de noviembre de 2026.
-**Responsables:** Equipo GymControl (Javier Candalaft, Lucas Cragaris, Tomás van Nynatten, Edney Ribeiro, Rodrigo García Solá).
+**Fecha de revisión:** 11 de noviembre de 2026.
+**Responsables:** Equipo GymControl (Javier Candalaft, Lucas Cragaris, Tomás van Nynatten, Edney Ribeiro).
 **Estado:** entrega completa con todos los requisitos obligatorios implementados y verificados.
 
 Este documento cubre los seis apartados del punto 15 de la consigna.
@@ -14,11 +22,11 @@ GymControl permite administrar socios, clases e inscripciones desde una interfaz
 - **Autenticación:** ingreso con contraseña o pregunta de seguridad. Permite reintentar sin un límite fijo, cambiar de método o salir con la opción `0`. El usuario se busca sin distinguir mayúsculas y espacios exteriores; la contraseña se compara exactamente. La respuesta de seguridad normaliza mayúsculas y espacios redundantes.
 - **Auditoría en archivo de texto:** registro persistente de accesos exitosos, fallidos y cancelados, cierre de sesión y altas, bajas y modificaciones en `auditoria.txt`. La opción `7` del menú principal permite consultar el historial y el conteo de operaciones.
 - **Persistencia en archivo JSON:** carga automática de `datos_gimnasio.json` al iniciar el sistema (`cargar_datos()`) y guardado automático tras cada alta, baja o modificación de socios, clases o inscripciones (`guardar_datos()`), preservando los cambios entre ejecuciones y reconstruyendo las tuplas de horarios.
-- **Horarios de clases con tuplas:** días de la semana y horas de inicio y fin, con validación de días (sin depender de `unicodedata`) y comparación de horas convertidas a minutos.
+- **Horarios de clases con tuplas:** días de la semana y horas de inicio y fin, con validación de días y comparación de horas convertidas a minutos.
 - **Modificación por atributo:** submenús para editar socios, clases e inscripciones. En inscripciones se pueden modificar las asistencias, el estado o ambos; los cambios de estado ajustan los cupos y no se permite reactivar sin cupo.
 - **Liberación de cupos:** al eliminar un socio se recuperan los cupos de sus inscripciones activas y se eliminan sus inscripciones asociadas.
 - **Reportes con conjuntos (`set`):** identificación de socios sin clases activas mediante diferencia de conjuntos y listado de disciplinas únicas sin duplicados en el menú de estadísticas.
-- **Ordenamientos optimizados con `sorted()` y catálogos con diccionarios:** sustitución de selección, inserción y burbujeo por `sorted()` en `src/ordenamientos.py` y `src/busquedas.py`, y uso de diccionarios `NIVELES_CLASE` y `TIPOS_SOCIO`.
+- **Ordenamientos optimizados con `sorted()` y catálogos con diccionarios:** sustitución de selección, inserción y burbujeo por `sorted()` en `src/ordenamientos.py` y `src/busquedas.py`, y uso de diccionarios `NIVELES_CLASE`, `TIPOS_SOCIO`, `DIAS_SEMANA` y `SESION_ACTUAL`.
 - **Salida controlada:** `main.py` carga el estado desde JSON, coordina el login y el menú, maneja `EOFError` y `KeyboardInterrupt` y ejecuta el cierre de sesión en `finally`.
 
 ## b. Estructuras de datos
@@ -27,8 +35,8 @@ GymControl permite administrar socios, clases e inscripciones desde una interfaz
 |---|---|---|
 | Listas y matrices | `src/datos.py`: usuarios, socios, clases e inscripciones. Cada módulo opera sobre estas matrices mediante índices definidos como constantes. | Conservan la representación tabular de la primera entrega y se sincronizan con `datos_gimnasio.json`. |
 | Tuplas (`tuple`) | `src/clases.py` (`pedir_horario()`), `src/persistencia.py` (`reconstruir_horario()`) y `src/datos.py`: `((dias...), hora_inicio, hora_fin)`. | Agrupan de forma inmutable los días de cursada y el rango horario de cada clase. Para cambiar el horario se reemplaza la tupla completa. |
-| Diccionarios (`dict`) | `src/auditoria.py` (`resumir_auditoria()`), `src/clases.py` (`DIAS_SEMANA`) y `src/datos.py` (`NIVELES_CLASE`, `TIPOS_SOCIO`). | Contabilizan eventos por operación, normalizan días ingresados y asocian códigos numéricos con los nombres de niveles de clase y tipos de socio. |
-| Conjuntos (`set`) | `src/estadisticas.py` (`obtener_socios_sin_clases_activas()`, `obtener_disciplinas_unicas()`). | Permiten obtener los socios sin inscripciones activas mediante diferencia de conjuntos (`codigos_todos - codigos_activos`) y eliminar duplicados en los nombres de disciplinas. |
+| Diccionarios (`dict`) | `src/auditoria.py` (`SESION_ACTUAL`, `resumir_auditoria()`), `src/clases.py` (`DIAS_SEMANA`) y `src/datos.py` (`NIVELES_CLASE`, `TIPOS_SOCIO`). | Administran la sesión activa sin `global`, contabilizan eventos por operación, normalizan días ingresados y asocian códigos numéricos con nombres de niveles y tipos. |
+| Conjuntos (`set`) | `src/estadisticas.py` (`obtener_socios_sin_clases_activas()`, `obtener_disciplinas_unicas()`). | Permiten obtener los socios sin inscripciones activas mediante diferencia de conjuntos (`codigos_todos - codigos_activos`) y eliminar duplicados en los nombres de disciplinas usando `set()` y `.add()`. |
 
 Ejemplo de horario: `(("Lunes", "Miércoles"), "08:00", "09:00")`.
 Ejemplo de resumen: `{"ALTA_SOCIO": 2, "BAJA_SOCIO": 1}`.
@@ -39,13 +47,13 @@ Ejemplo de resumen: `{"ALTA_SOCIO": 2, "BAJA_SOCIO": 1}`.
 
 `src/auditoria.py` utiliza `auditoria.txt` en la raíz del proyecto. El archivo se amplía en modo `a`, con codificación UTF-8. No se vacía al iniciar ni al salir.
 
-Cada línea contiene cuatro campos separados por ` | `:
+Cada línea contiene cuatro campos separados por ` | ` (identificador de evento incremental, usuario, operación y detalle):
 
 ```text
-2026-11-05T10:00:00-03:00 | admin | ACCESO_EXITOSO | contraseña
+EV-0001 | admin | ACCESO_EXITOSO | contraseña
 ```
 
-`leer_auditoria()` recupera los eventos con cuatro campos y una fecha interpretable. `mostrar_auditoria()` imprime el historial y utiliza `resumir_auditoria()` para contar las operaciones. No se registran contraseñas ni respuestas de seguridad.
+`leer_auditoria()` recupera los eventos válidos con cuatro campos. `mostrar_auditoria()` imprime el historial y utiliza `resumir_auditoria()` para contar las operaciones. No se registran contraseñas ni respuestas de seguridad.
 
 ### Archivo JSON (`datos_gimnasio.json`)
 
@@ -61,7 +69,6 @@ Cada línea contiene cuatro campos separados por ` | `:
 | Auditoría inexistente | `FileNotFoundError`: se devuelve `[]`. |
 | Fallo al escribir auditoría | `OSError`: se muestra un aviso y se devuelve `False`. |
 | Fallo al leer o decodificar auditoría | `OSError` o `UnicodeError`: se avisa y se devuelve `None`, distinto de un historial vacío. |
-| Fecha inválida en una línea de auditoría | `ValueError`: se omite esa línea y continúa la lectura. |
 | Archivo JSON inexistente al iniciar | `FileNotFoundError`: se crea `datos_gimnasio.json` con los datos iniciales. |
 | Archivo JSON corrupto o con estructura inválida | `json.JSONDecodeError`, `KeyError`, `ValueError`, `TypeError`, `OSError`, `UnicodeError`: se informa un aviso y se mantienen los datos en memoria. |
 | Fallo al guardar JSON | `OSError`, `TypeError`: se informa un aviso y devuelve `False`. |
@@ -71,7 +78,7 @@ Cada línea contiene cuatro campos separados por ` | `:
 
 ## e. Pruebas unitarias
 
-### Suite principal de pruebas unitarias (`test_gymcontrol.py`)
+### Suite de pruebas unitarias (`test_gymcontrol.py`)
 
 Se ejecuta de forma independiente desde la raíz con:
 
@@ -79,7 +86,7 @@ Se ejecuta de forma independiente desde la raíz con:
 python3 -B test_gymcontrol.py
 ```
 
-Incluye 12 pruebas unitarias (superando el mínimo de 10 exigido en el punto 9) sobre 9 funciones distintas del sistema, sin utilizar clases (`class`):
+Incluye 12 pruebas unitarias (superando el mínimo de 10 exigido en el punto 9) sobre 9 funciones distintas del sistema, sin utilizar clases (`class`) ni librerías externas o no vistas en la materia:
 
 | N.º | Categoría | Función | Caso y resultado esperado |
 |---|---|---|---|
@@ -94,19 +101,11 @@ Incluye 12 pruebas unitarias (superando el mínimo de 10 exigido en el punto 9) 
 | 9 | Límite (2/2) | `liberar_cupos_de_afiliado` | Socio sin inscripciones → `(0, 12)`. |
 | 10 | Relevante del sistema | `liberar_cupos_de_afiliado` | Una inscripción activa y otra inactiva → recupera solo el cupo activo `(1, 15, 15)`. |
 | 11 | Relevante (Conjuntos) | `obtener_socios_sin_clases_activas` | Diferencia de conjuntos entre socios totales y activos → `{103, 112}`. |
-| 12 | Relevante (JSON + Tuplas) | `guardar_datos` / `cargar_datos` | Guardado y recuperación en JSON temporal reconstruyendo tuplas de horarios → `(True, True, 12, True)`. |
+| 12 | Relevante (JSON + Tuplas) | `guardar_datos` / `cargar_datos` | Guardado y recuperación en JSON reconstruyendo tuplas de horarios → `(True, True, 12, True)`. |
 
 Cada prueba muestra en consola los 5 puntos obligatorios: función probada, datos utilizados, resultado esperado, resultado obtenido y si fue aprobada o no.
 
-### Regresión de autenticación y auditoría (`tests/test_autenticacion_auditoria.py`)
-
-```bash
-python3 -B tests/test_autenticacion_auditoria.py
-```
-
-Verifica 12 casos adicionales de lectura/escritura de auditoría, manejo de errores de archivo y flujo de inicio y cierre de sesión.
-
-**Verificación del 10 de noviembre de 2026:** 12/12 pruebas en `test_gymcontrol.py` y 12/12 en `tests/test_autenticacion_auditoria.py` aprobadas con código de salida `0`.
+**Verificación del 11 de noviembre de 2026:** 12/12 pruebas en `test_gymcontrol.py` aprobadas.
 
 ## f. Cambios respecto de la primera parte
 

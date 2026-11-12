@@ -26,7 +26,7 @@ Los datos de socios, clases e inscripciones se cargan automáticamente desde `da
 - Control de cupos (incluyendo liberación al dar de baja un socio) y prevención de inscripciones activas duplicadas.
 - Búsqueda secuencial y binaria.
 - Ordenamientos mediante `sorted()`.
-- Diccionarios para conteo de auditoría, normalización de días y catálogos de niveles de clase y tipos de socio.
+- Diccionarios para estado de sesión, conteo de auditoría, normalización de días y catálogos de niveles de clase y tipos de socio.
 - Conjuntos (`set`) para identificar socios sin clases activas (diferencia de conjuntos) y disciplinas disponibles sin repetir.
 - Reportes matriciales.
 - Uso efectivo de `map`, `filter`, `reduce` y expresiones regulares.
@@ -75,21 +75,15 @@ Para `admin`, la pregunta de demostración es «¿Cuál es tu color favorito?» 
 respuesta es `azul`. Los demás usuarios tienen sus datos de ejemplo en `src/datos.py`.
 Las respuestas ignoran mayúsculas y espacios redundantes; las contraseñas son exactas.
 
-- **Auditoría (`auditoria.txt`):** se almacena en la raíz del proyecto y se amplía entre ejecuciones. Cada línea contiene fecha/hora con zona, usuario, operación y detalle, separados por ` | `. La opción 7 muestra el historial y un conteo por operación mediante un diccionario.
+- **Auditoría (`auditoria.txt`):** se almacena en la raíz del proyecto y se amplía entre ejecuciones. Cada línea contiene identificador de evento, usuario, operación y detalle, separados por ` | `. La opción 7 muestra el historial y un conteo por operación mediante un diccionario.
 - **Persistencia (`datos_gimnasio.json`):** `src/persistencia.py` carga el estado del gimnasio al iniciar `main.py` y guarda automáticamente los cambios luego de cada alta, baja o modificación, reconstruyendo las tuplas de horarios `((dias...), hora_inicio, hora_fin)` y controlando excepciones de lectura/escritura o formato inválido.
 
 ## Pruebas unitarias
 
-Suite principal de pruebas unitarias independientes (sin uso de clases `class`):
+Suite de pruebas unitarias independientes (sin uso de clases `class` ni librerías no vistas en la materia):
 
 ```bash
 python3 -B test_gymcontrol.py
 ```
 
-Cubre 12 pruebas unitarias sobre 9 funciones del sistema (4 casos válidos, 3 inválidos, 2 límites y 3 casos relevantes de negocio: liberación de cupos, conjuntos y persistencia JSON con tuplas). Devuelve código `0` si todas pasan y `1` si alguna falla.
-
-Pruebas de regresión de autenticación y auditoría:
-
-```bash
-python3 -B tests/test_autenticacion_auditoria.py
-```
+Cubre 12 pruebas unitarias sobre 9 funciones del sistema (4 casos válidos, 3 inválidos, 2 límites y 3 casos relevantes de negocio: liberación de cupos, conjuntos y persistencia JSON con tuplas).

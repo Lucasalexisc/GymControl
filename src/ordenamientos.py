@@ -1,27 +1,29 @@
 from datos import (
-socios ,
-clases ,
-inscripciones ,
-SOCIO_EDAD ,
-SOCIO_CODIGO ,
-SOCIO_NOMBRE ,
-SOCIO_TIPO ,
-CLASE_NIVEL ,
-CLASE_CODIGO ,
-CLASE_NOMBRE ,
-CLASE_CUPOS ,
-CLASE_HORARIO ,
-INSCRIPCION_ASISTENCIAS ,
-INSCRIPCION_CODIGO ,
-INSCRIPCION_CODIGO_SOCIO ,
-INSCRIPCION_CODIGO_CLASE ,
-INSCRIPCION_ESTADO ,
-obtener_nombre_tipo ,
-obtener_nombre_nivel
+    socios,
+    clases,
+    inscripciones,
+    SOCIO_EDAD,
+    SOCIO_CODIGO,
+    SOCIO_NOMBRE,
+    SOCIO_TIPO,
+    CLASE_NIVEL,
+    CLASE_CODIGO,
+    CLASE_NOMBRE,
+    CLASE_CUPOS,
+    CLASE_HORARIO,
+    INSCRIPCION_ASISTENCIAS,
+    INSCRIPCION_CODIGO,
+    INSCRIPCION_CODIGO_SOCIO,
+    INSCRIPCION_CODIGO_CLASE,
+    INSCRIPCION_ESTADO,
+    obtener_nombre_tipo,
+    obtener_nombre_nivel,
 )
 from clases import formatear_horario
+from utilidades import buscar_posicion_socio, buscar_posicion_clase
 
-def ordenar_socios_por_edad ():
+
+def ordenar_socios_por_edad():
     """
     Objetivo: mostrar los socios ordenados de menor a mayor edad.
     Parámetros: ninguno.
@@ -29,11 +31,12 @@ def ordenar_socios_por_edad ():
     """
     afiliados_ordenados = sorted(socios, key=lambda fila: fila[SOCIO_EDAD])
 
-    print ("SOCIOS ORDENADOS POR EDAD")
-    for fila in afiliados_ordenados :
-        print (f"Código: {fila[SOCIO_CODIGO]}, Nombre: {fila[SOCIO_NOMBRE]}, Edad: {fila[SOCIO_EDAD]}, Tipo: {obtener_nombre_tipo(fila[SOCIO_TIPO])}")
+    print("SOCIOS ORDENADOS POR EDAD")
+    for fila in afiliados_ordenados:
+        print(f"Código: {fila[SOCIO_CODIGO]}, Nombre: {fila[SOCIO_NOMBRE]}, Edad: {fila[SOCIO_EDAD]}, Tipo: {obtener_nombre_tipo(fila[SOCIO_TIPO])}")
 
-def ordenar_clases_por_nivel ():
+
+def ordenar_clases_por_nivel():
     """
     Objetivo: mostrar las clases ordenadas de menor a mayor nivel.
     Parámetros: ninguno.
@@ -41,11 +44,12 @@ def ordenar_clases_por_nivel ():
     """
     clases_ordenadas = sorted(clases, key=lambda fila: fila[CLASE_NIVEL])
 
-    print ("CLASES ORDENADAS POR NIVEL")
-    for fila in clases_ordenadas :
-        print (f"Código: {fila[CLASE_CODIGO]}, Nombre: {fila[CLASE_NOMBRE]}, Nivel: {obtener_nombre_nivel(fila[CLASE_NIVEL])}, Cupos disponibles: {fila[CLASE_CUPOS]}, Horario: {formatear_horario(fila[CLASE_HORARIO])}")
+    print("CLASES ORDENADAS POR NIVEL")
+    for fila in clases_ordenadas:
+        print(f"Código: {fila[CLASE_CODIGO]}, Nombre: {fila[CLASE_NOMBRE]}, Nivel: {obtener_nombre_nivel(fila[CLASE_NIVEL])}, Cupos disponibles: {fila[CLASE_CUPOS]}, Horario: {formatear_horario(fila[CLASE_HORARIO])}")
 
-def ordenar_inscripciones_por_asistencias ():
+
+def ordenar_inscripciones_por_asistencias():
     """
     Objetivo: mostrar las inscripciones ordenadas de menor a mayor cantidad de asistencias.
     Parámetros: ninguno.
@@ -53,6 +57,11 @@ def ordenar_inscripciones_por_asistencias ():
     """
     inscripciones_ordenadas = sorted(inscripciones, key=lambda fila: fila[INSCRIPCION_ASISTENCIAS])
 
-    print ("INSCRIPCIONES ORDENADAS POR ASISTENCIAS")
-    for fila in inscripciones_ordenadas :
-        print (f"Código: {fila[INSCRIPCION_CODIGO]}, Socio: {fila[INSCRIPCION_CODIGO_SOCIO]}, Clase: {fila[INSCRIPCION_CODIGO_CLASE]}, Asistencias: {fila[INSCRIPCION_ASISTENCIAS]}, Estado: {fila[INSCRIPCION_ESTADO]}")
+    print("INSCRIPCIONES ORDENADAS POR ASISTENCIAS")
+    for fila in inscripciones_ordenadas:
+        posicion_socio = buscar_posicion_socio(fila[INSCRIPCION_CODIGO_SOCIO])
+        posicion_clase = buscar_posicion_clase(fila[INSCRIPCION_CODIGO_CLASE])
+        nombre_socio = socios[posicion_socio][SOCIO_NOMBRE] if posicion_socio != -1 else "Socio inexistente"
+        nombre_clase = clases[posicion_clase][CLASE_NOMBRE] if posicion_clase != -1 else "Clase inexistente"
+        estado_texto = "Activa" if fila[INSCRIPCION_ESTADO] == 1 else "Inactiva"
+        print(f"Código: {fila[INSCRIPCION_CODIGO]}, Socio: {nombre_socio}, Clase: {nombre_clase}, Asistencias: {fila[INSCRIPCION_ASISTENCIAS]}, Estado: {estado_texto}")
