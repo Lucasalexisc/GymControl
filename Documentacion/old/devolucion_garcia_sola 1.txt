@@ -266,4 +266,16 @@ Código     Nombre               Nivel              Cupos disponibles
 
 209        Natacion             Intermedio         16
 
-210        Stretching           Principiante       18
+210        Stretching           Principiante       18}
+
+
+
+Corrección de exposición:
+qué quiero modificar: Lo que pidió el profe es que en el menú de modificación, le demos opciones al usuario para elegir qué atributo modificar, en vez de pedirle que modifique todos los atributos como estamos haciendo hoy
+
+no le gusta los sort: Lo que pidió es que usemos el sort nativo para que sea más eficiente
+
+todo en castellano: parece que había algunos nombres de variables en inglés, pidió que normalicemos
+
+sacamos la validación de 3 veces: acá no le gustó que se bloquee después de 3 veces, lo sacamos directamente
+hacer pregunta extra: como no hay el 3 time limit retry ahora, pidió que agreguemos una pregunta como método alternativo de login
